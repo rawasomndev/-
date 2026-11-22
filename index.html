@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مفرداتي</title>
+<meta name="theme-color" content="#EEF1F6" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#11151E" media="(prefers-color-scheme: dark)"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="مفرداتي"><link rel="stylesheet" href="fonts/fonts.css">
+<style>
+/* Layout idea: a shelf of ten index-card decks; every deck shows its 35 word slots as a grid, so what you know is visible at a glance. */
+:root{
+  --bg:#EEF1F6; --surface:#FFFFFF; --ink:#172033; --muted:#5B677D; --line:#D9DFEA;
+  --cb1:#FFE7B8; --cf1:#9A5B00; --cb2:#FFD3A8; --cf2:#A33F00; --cb3:#FFC2CF; --cf3:#B0123F;
+  --accent:#3B4CCA; --ok:#13865A; --ok-soft:#DDF3E9; --miss:#CC3D34; --miss-soft:#FBE3E1; --idle:#CBD2DF;
+  --shadow:0 1px 0 rgba(23,32,51,.06), 0 8px 24px -14px rgba(23,32,51,.28);
+  --f-ar:"Readex Pro","Segoe UI",Tahoma,sans-serif;
+  --f-en:"Bricolage Grotesque","Readex Pro","Segoe UI",sans-serif;
+  --r-lg:18px; --r-md:12px; --r-sm:8px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11151E; --surface:#1A202C; --ink:#E7EBF3; --muted:#9AA6BC; --line:#2C3445;
+    --cb1:#4A3510; --cf1:#FFC965; --cb2:#52270C; --cf2:#FF9C57; --cb3:#561528; --cf3:#FF7FA0;
+  --accent:#8E9BFF; --ok:#4CC995; --ok-soft:#173A2C; --miss:#FF7A70; --miss-soft:#47201E; --idle:#3A4357;
+    --shadow:0 1px 0 rgba(0,0,0,.4), 0 10px 26px -16px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11151E; --surface:#1A202C; --ink:#E7EBF3; --muted:#9AA6BC; --line:#2C3445;
+  --cb1:#4A3510; --cf1:#FFC965; --cb2:#52270C; --cf2:#FF9C57; --cb3:#561528; --cf3:#FF7FA0;
+  --accent:#8E9BFF; --ok:#4CC995; --ok-soft:#173A2C; --miss:#FF7A70; --miss-soft:#47201E; --idle:#3A4357;
+  --shadow:0 1px 0 rgba(0,0,0,.4), 0 10px 26px -16px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ar);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.en{font-family:var(--f-en);direction:ltr;unicode-bidi:isolate}
+.wrap{max-width:760px;margin:0 auto;padding:28px 18px 64px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand h1{margin:0;font-size:40px;line-height:1.1;font-weight:700;letter-spacing:-.01em}
+.brand .lvl{font-family:var(--f-en);font-weight:800;font-size:15px;color:var(--accent);direction:ltr}
+.lead{color:var(--muted);margin:6px 0 22px;max-width:56ch}
+.iconbtn{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.iconbtn svg{width:20px;height:20px}
+.iconbtn:hover{border-color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:26px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px}
+.stat b{display:block;font-family:var(--f-en);font-size:28px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:14px}
+.stat.ok b{color:var(--ok)} .stat.miss b{color:var(--miss)}
+.spot{position:relative;overflow:hidden;background:var(--ink);color:var(--bg);border-radius:22px;padding:22px 22px 18px;margin-bottom:26px;display:grid;gap:6px}
+.spot::after{content:"";position:absolute;inset-inline-end:-40px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 70%,transparent),transparent 70%);opacity:.55;pointer-events:none}
+.spot .lab{font-size:13.5px;opacity:.75;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.spot .lab .tg{font-family:var(--f-en);direction:ltr;background:var(--c);color:#fff;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:600;opacity:1}
+.spot .wl{display:flex;align-items:center;justify-content:flex-end;gap:12px;direction:ltr}
+.spot .en{font-size:42px;font-weight:800;line-height:1.1;letter-spacing:-.01em}
+.spot .ar{font-size:18px;font-weight:500}
+.spot .ex{font-family:var(--f-en);direction:ltr;text-align:left;opacity:.82;font-size:16px;margin:2px 0 6px}
+.spot .ex mark{background:transparent;color:inherit;text-decoration:underline;text-decoration-color:var(--c);text-decoration-thickness:3px;text-underline-offset:4px}
+.spot .say{border-color:color-mix(in srgb,var(--bg) 30%,transparent);color:var(--bg)}
+.spot .row{display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:1}
+.spot .btn{min-height:38px;background:transparent;color:var(--bg);border-color:color-mix(in srgb,var(--bg) 30%,transparent);font-size:14px}
+.spot .btn:hover{border-color:var(--bg)}
+.decks{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media (max-width:620px){.decks{grid-template-columns:1fr;gap:14px}.brand h1{font-size:34px}.slots{gap:3px}.slot{aspect-ratio:3/1}.deck{padding:28px 14px 14px;gap:8px}.stat{padding:10px 12px}.stat b{font-size:24px}.stat span{font-size:13px}.spot .en{font-size:34px}}
+.deck{position:relative;text-align:start;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 7%,var(--surface)),var(--surface) 55%);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px 16px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;transition:transform .15s ease,border-color .15s}
+.deck:hover{transform:translateY(-2px);border-color:var(--c)}
+.deck .tab{position:absolute;top:-1px;inset-inline-start:18px;background:var(--c);color:#fff;font-family:var(--f-en);font-weight:600;font-size:12.5px;padding:3px 12px 4px;border-radius:0 0 10px 10px;direction:ltr}
+.deck h2{margin:0;font-size:19px;font-weight:600}
+.deck .meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:13.5px}
+.deck .meta .en{font-weight:600;color:var(--ink)}
+.slots{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;direction:rtl}
+.slot{aspect-ratio:2.2/1;border-radius:4px;background:color-mix(in srgb,var(--c) 22%,var(--surface))}
+.slot.k{background:var(--ok)} .slot.m{background:var(--miss)}
+.slot.e{background:transparent;border:1.5px dashed var(--line)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin:18px 2px 0}
+.legend i{display:inline-block;width:14px;height:8px;border-radius:3px;margin-inline-end:6px;vertical-align:middle;background:color-mix(in srgb,var(--accent) 25%,var(--surface))}
+.legend i.k{background:var(--ok)} .legend i.m{background:var(--miss)} .legend i.e{background:transparent;border:1.5px dashed var(--line)}
+.foot{margin-top:32px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:13.5px}
+.sync{display:inline-flex;align-items:center;gap:8px}
+.sync i{width:8px;height:8px;border-radius:50%;background:var(--idle)}
+.sync.cloud i{background:var(--ok)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:500;text-decoration:none}
+.btn svg{width:18px;height:18px}
+.btn:hover{border-color:var(--c,var(--accent))}
+.btn.primary{background:var(--c,var(--accent));border-color:var(--c,var(--accent));color:#fff}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.ghost:hover{border-color:var(--line)}
+.btn.danger{color:var(--miss)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);background:none;border:0;padding:6px 0;font-size:15px}
+.back svg{width:18px;height:18px}
+.back:hover{color:var(--ink)}
+.dhead{margin:10px 0 18px;padding-inline-start:16px;border-inline-start:6px solid var(--c)}
+.dhead .en{color:var(--c);font-weight:600;font-size:14px}
+.dhead h2{margin:2px 0 4px;font-size:28px;font-weight:700;line-height:1.25}
+.dhead p{margin:0;color:var(--muted)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 14px;font-size:14px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip b{font-family:var(--f-en);font-weight:600;margin-inline-start:4px}
+.list{display:flex;flex-direction:column;gap:8px}
+.word{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+.word.open{border-color:var(--c)}
+.wrow{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:12px;width:100%;padding:12px 14px;background:none;border:0;text-align:start}
+.wrow .mark{width:9px;height:9px;border-radius:50%;background:var(--idle)}
+.wrow .mark.k{background:var(--ok)} .wrow .mark.m{background:var(--miss)}
+.wrow .w{display:flex;flex-direction:column;min-width:0}
+.wrow .w .en{font-size:19px;font-weight:600;text-align:right;line-height:1.3;overflow-wrap:anywhere}
+.wrow .w .ar{color:var(--muted);font-size:14.5px}
+.wrow .chev{width:18px;height:18px;color:var(--muted);transition:transform .2s}
+.word.open .chev{transform:rotate(180deg)}
+.say{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--muted)}
+.say svg{width:17px;height:17px}
+.say:hover{color:var(--c,var(--accent));border-color:var(--c,var(--accent))}
+.wbody{padding:0 14px 14px;display:none}
+.word.open .wbody{display:block}
+.sents{margin:0;padding:12px 16px;list-style:none;border-radius:var(--r-sm);background:var(--bg);display:flex;flex-direction:column;gap:8px}
+.sents li{font-family:var(--f-en);direction:ltr;text-align:left;font-size:16px;line-height:1.55}
+.sents mark{background:transparent;color:var(--c,var(--accent));font-weight:700}
+.wtools{display:flex;gap:6px;justify-content:flex-end;margin-top:10px}
+.wtools .btn{min-height:36px;padding:0 12px;font-size:14px}
+.empty{background:var(--surface);border:1.5px dashed var(--line);border-radius:var(--r-md);padding:24px;text-align:center;color:var(--muted)}
+.note{color:var(--muted);font-size:14px;margin:10px 2px}
+@media (hover:none){.kbd{display:none}}
+@media (max-width:520px){.card{min-height:400px}}
+/* quiz */
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.qcount{font-family:var(--f-en);font-weight:600;font-variant-numeric:tabular-nums;color:var(--muted);direction:ltr}
+.qside{display:flex;align-items:center;gap:8px}
+.tog{width:38px;height:38px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--muted);flex:none}
+.tog svg{width:19px;height:19px}
+.tog[aria-pressed="true"]{color:var(--c);border-color:var(--c)}
+.combo{display:inline-flex;align-items:center;gap:3px;font-family:var(--f-en);font-weight:800;font-size:16px;direction:ltr;padding:5px 11px 5px 9px;border-radius:99px;background:var(--cb1);color:var(--cf1);opacity:0;transform:scale(.6);transition:opacity .2s,transform .3s cubic-bezier(.3,1.6,.5,1),background .3s,color .3s}
+.combo svg{width:16px;height:16px}
+.combo.on{opacity:1;transform:scale(1)}
+.combo[data-l="2"]{background:var(--cb2);color:var(--cf2)}
+.combo[data-l="3"]{background:var(--cb3);color:var(--cf3)}
+.combo.bump{animation:bump .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes bump{40%{transform:scale(1.28)}}
+.track{display:flex;gap:3px;margin-bottom:26px}
+.track i{flex:1;height:8px;border-radius:3px;background:var(--line);transition:background .25s}
+.track i.cur{background:var(--c);opacity:.5}
+.track i.ok{background:var(--ok)}
+.track i.miss{background:var(--miss)}
+.prompt{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:34px 20px;text-align:center;margin-bottom:18px;animation:pin .34s cubic-bezier(.2,.8,.2,1) both;transition:border-color .2s,box-shadow .2s}
+.prompt.good{border-color:var(--ok);box-shadow:0 0 0 5px var(--ok-soft)}
+.prompt.bad{border-color:var(--miss);box-shadow:0 0 0 5px var(--miss-soft)}
+@keyframes pin{from{opacity:0;transform:translateX(-36px)}}
+.prompt small{display:block;color:var(--muted);font-size:14px;margin-bottom:8px}
+.prompt .ar{font-size:32px;font-weight:600;line-height:1.35;text-wrap:balance}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.opts{grid-template-columns:1fr}.prompt .ar{font-size:27px}}
+.opt{position:relative;display:flex;align-items:center;gap:12px;min-height:62px;padding:10px 16px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface);text-align:start;animation:oin .32s cubic-bezier(.2,.8,.2,1) both}
+.opt:nth-child(2){animation-delay:.04s}.opt:nth-child(3){animation-delay:.08s}.opt:nth-child(4){animation-delay:.12s}
+@keyframes oin{from{opacity:0;transform:translateY(12px)}}
+.opt.hit{animation:pop .42s cubic-bezier(.3,1.6,.5,1)}
+.opt.wrong{animation:shake .42s}
+@keyframes pop{40%{transform:scale(1.06)}}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+.spark{position:absolute;left:50%;top:50%;width:10px;height:10px;border-radius:50%;pointer-events:none;animation:spark .6s cubic-bezier(.1,.7,.3,1) forwards}
+@keyframes spark{from{transform:translate(-50%,-50%) scale(1);opacity:1}to{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.2);opacity:0}}
+.opt .k{font-family:var(--f-en);font-size:13px;color:var(--muted);width:22px;height:22px;border-radius:6px;border:1px solid var(--line);display:grid;place-items:center;flex:none}
+.opt .en{font-size:21px;font-weight:600;flex:1;text-align:right}
+.opt:hover:not([disabled]){border-color:var(--c)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--miss);background:var(--miss-soft)}
+.opt[disabled]{cursor:default}
+.prompt .reveal{height:52px;display:flex;align-items:flex-end;justify-content:center}
+.prompt .qen{display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--f-en);font-weight:800;font-size:38px;line-height:1.2;color:var(--c);overflow-wrap:anywhere}
+.prompt .reveal .mean{font-size:26px;font-weight:600;line-height:1.3;animation:pop .42s cubic-bezier(.3,1.6,.5,1)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .prompt .qen{color:color-mix(in srgb, var(--c) 55%, #fff)}}
+:root[data-theme="dark"] .prompt .qen{color:color-mix(in srgb, var(--c) 55%, #fff)}
+.selfq{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sbtn{position:relative;min-height:76px;border-radius:var(--r-md);border:2px solid;background:var(--surface);font-size:20px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;animation:oin .32s cubic-bezier(.2,.8,.2,1) both}
+.sbtn:nth-child(2){animation-delay:.05s}
+.sbtn svg{width:22px;height:22px}
+.sbtn.k{border-color:var(--ok);color:var(--ok)}
+.sbtn.m{border-color:var(--miss);color:var(--miss)}
+.sbtn.k.on{background:var(--ok-soft)}
+.sbtn.m.on{background:var(--miss-soft)}
+.sbtn.on.k{animation:pop .42s cubic-bezier(.3,1.6,.5,1)}
+.sbtn[disabled]{cursor:default}
+.sbtn[disabled]:not(.on){opacity:.45}
+.modes{display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
+.mode{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:start;padding:16px 18px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--bg)}
+.mode b{font-size:18px}
+.mode span{color:var(--muted);font-size:14.5px}
+.mode:hover,.mode:focus-visible{border-color:var(--c)}
+.mode.last{border-color:var(--c)}
+.res{text-align:center;padding:10px 0 18px}
+.res .score{font-family:var(--f-en);font-weight:800;font-size:72px;line-height:1;direction:ltr;font-variant-numeric:tabular-nums}
+.res .score small{font-size:30px;color:var(--muted);font-weight:600}
+.res p{color:var(--muted);margin:10px 0 0}
+.res .score{animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+.rstats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+.rstats span{background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:6px 14px;font-size:14.5px}
+.rstats b{font-family:var(--f-en);font-variant-numeric:tabular-nums}
+.rstats .up{color:var(--ok);font-weight:600;font-style:normal}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:40}
+.rlists{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+@media (max-width:620px){.rlists{grid-template-columns:1fr}}
+.rbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:14px}
+.rbox h3{margin:0 0 8px;font-size:16px;display:flex;align-items:center;gap:8px}
+.rbox h3 i{width:9px;height:9px;border-radius:50%}
+.rbox ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.rbox li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 0;border-top:1px solid var(--line)}
+.rbox li:first-child{border-top:0}
+.rbox li .en{font-weight:600;font-size:16.5px}
+.rbox li span{color:var(--muted);font-size:14px}
+/* cards */
+.stage{perspective:1400px;margin:6px 0 16px}
+.card{position:relative;width:100%;min-height:330px;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.7,.2,1);cursor:pointer}
+.card.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:26px 22px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;border-top:6px solid var(--c)}
+.face.back{transform:rotateY(180deg);justify-content:flex-start;overflow:auto}
+.face .side{position:absolute;top:12px;inset-inline-end:16px;font-size:12.5px;color:var(--muted)}
+.face .ar{font-size:34px;font-weight:600;text-align:center;line-height:1.35;text-wrap:balance}
+.face .hint{color:var(--muted);font-size:14px}
+.face .bigen{display:flex;align-items:center;gap:10px;margin-top:8px}
+.face .bigen .en{font-size:38px;font-weight:800;color:var(--c);line-height:1.1}
+.face .sents{width:100%}
+.cnav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.cnav .mid{display:flex;gap:8px}
+.cnav .pos{font-family:var(--f-en);color:var(--muted);direction:ltr;font-variant-numeric:tabular-nums}
+.selfrate{display:flex;gap:10px;justify-content:center;margin-bottom:14px}
+.selfrate .btn.k{border-color:var(--ok);color:var(--ok)}
+.selfrate .btn.m{border-color:var(--miss);color:var(--miss)}
+@media (prefers-reduced-motion: reduce){
+  .card{transition:none}
+  .deck,.chev,.track i,.combo{transition:none}
+  .prompt,.opt,.opt.hit,.opt.wrong,.combo.bump,.res .score,.sbtn,.sbtn.on.k,.prompt .reveal .mean{animation:none}
+}
+/* sheet / dialog */
+.scrim{position:fixed;inset:0;background:rgba(10,14,22,.5);display:grid;place-items:center;padding:16px;z-index:50}
+.sheet{width:100%;max-width:560px;max-height:calc(100% - 24px);overflow:auto;background:var(--surface);border-radius:20px;border:1px solid var(--line);box-shadow:0 30px 60px -20px rgba(0,0,0,.45);padding:22px}
+.sheet h3{margin:0 0 4px;font-size:21px}
+.sheet .sub{color:var(--muted);margin:0 0 16px;font-size:14.5px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-weight:500;font-size:14.5px}
+.field input,.field textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);padding:10px 12px;outline:none}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field input.en,.field textarea.en{text-align:left;font-size:16.5px}
+.field textarea{resize:vertical;min-height:58px}
+.field .err{color:var(--miss);font-size:13.5px}
+.field .warn{color:#B07300;font-size:13.5px}
+:root[data-theme="dark"] .field .warn{color:#E3B34C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .field .warn{color:#E3B34C}}
+.row2{display:flex;gap:10px;justify-content:flex-start;flex-wrap:wrap;margin-top:6px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);border-radius:14px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 14px 30px -10px rgba(0,0,0,.5);z-index:60;max-width:calc(100% - 24px);font-size:15px}
+.toast button{background:transparent;border:1px solid currentColor;color:inherit;border-radius:10px;padding:4px 12px;font-weight:600}
+.banner{background:var(--miss-soft);color:var(--ink);border-radius:var(--r-md);padding:10px 14px;margin-bottom:16px;font-size:14.5px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wrap" id="app" aria-live="polite"></div>
+<div id="layer"></div>
+<script>
+"use strict";
+const DEFAULT = [{"ar": "أفعال أكاديمية", "en": "Academic verbs", "words": [{"en": "analyze", "ar": "يحلّل", "s": ["Scientists analyze the data before they publish any results.", "We need to analyze why the project failed last year.", "She analyzed the poem line by line in her essay."]}, {"en": "assess", "ar": "يقيّم", "s": ["Teachers assess students through tests and class projects.", "It is too early to assess the damage caused by the storm.", "The doctor assessed his condition and sent him home."], "g": "eval"}, {"en": "assume", "ar": "يفترض", "s": ["I assumed you already knew about the meeting.", "Don't assume that everyone shares your opinion.", "Let's assume the price stays the same next year."]}, {"en": "clarify", "ar": "يوضّح (يزيل الغموض)", "s": ["Could you clarify what you mean by \"soon\"?", "The teacher clarified the instructions before the test began.", "The report aims to clarify the causes of the problem."], "g": "show"}, {"en": "acquire", "ar": "يكتسب", "s": ["Children acquire language naturally by listening.", "He acquired a lot of experience while working abroad.", "Gamers often acquire English words from online games."], "g": "obtain"}, {"en": "adapt", "ar": "يتكيّف", "s": ["Animals must adapt to changes in their environment.", "It took me a month to adapt to the new school.", "The story was adapted into a successful film."]}, {"en": "conclude", "ar": "يستنتج", "s": ["The report concluded that the plan was too expensive.", "From the evidence, we can conclude that he was lying.", "Researchers concluded that sleep improves memory."]}, {"en": "conduct", "ar": "يُجري (بحثًا أو دراسة)", "s": ["The university conducted a survey of 500 students.", "They are conducting experiments on new materials.", "The interview was conducted in English."]}, {"en": "consist", "ar": "يتكوّن (من)", "s": ["The team consists of five players and a coach.", "Breakfast consisted of bread, cheese and tea.", "The course consists of ten short lessons."]}, {"en": "contribute", "ar": "يساهم", "s": ["Everyone contributed some money to buy the gift.", "Stress can contribute to health problems.", "She contributed many ideas to the discussion."]}, {"en": "define", "ar": "يعرّف (يحدد المعنى)", "s": ["It is hard to define what makes a song great.", "The dictionary defines this word in two ways.", "First, define the problem clearly, then look for solutions."]}, {"en": "demonstrate", "ar": "يُثبت بالدليل", "s": ["The study demonstrates that exercise reduces stress.", "He demonstrated his skills during the test.", "These results demonstrate how important practice is."], "g": "show"}, {"en": "determine", "ar": "يحدّد", "s": ["Your effort will determine your final grade.", "Police are trying to determine the cause of the fire.", "The weather often determines our plans for the weekend."]}, {"en": "distinguish", "ar": "يميّز (بين)", "s": ["Can you distinguish between British and American accents?", "Twins can be hard to distinguish from each other.", "What distinguishes a good leader from a bad one?"]}, {"en": "emphasize", "ar": "يؤكّد على", "s": ["The coach emphasized the importance of teamwork.", "She emphasized that the deadline could not change.", "The report emphasizes the need for more research."]}, {"en": "establish", "ar": "يؤسّس", "s": ["The company was established in 1998.", "They want to establish a library in the village.", "It takes time to establish trust with new people."]}, {"en": "estimate", "ar": "يقدّر (تقريبًا)", "s": ["We estimate that the trip will take three hours.", "Experts estimate the cost at two million dollars.", "Can you estimate how many people came to the event?"]}, {"en": "evaluate", "ar": "يقيّم بدقة", "s": ["We need to evaluate each option before we decide.", "The program will be evaluated at the end of the year.", "Students evaluated the course using an online form."], "g": "eval"}, {"en": "examine", "ar": "يفحص", "s": ["The doctor examined my knee carefully.", "The committee will examine the new proposal next week.", "Let's examine the evidence before we judge him."], "g": "exam"}, {"en": "classify", "ar": "يصنّف", "s": ["Scientists classify animals according to their features.", "The books are classified by subject and author.", "How would you classify this type of music?"]}, {"en": "illustrate", "ar": "يوضّح بمثال", "s": ["The teacher used a story to illustrate her point.", "This chart illustrates how prices have risen.", "Let me illustrate with a simple example."], "g": "show"}, {"en": "indicate", "ar": "يشير إلى", "s": ["Recent studies indicate that sugar affects sleep.", "The arrow indicates the way out of the building.", "His smile indicated that he was happy with the result."]}, {"en": "interpret", "ar": "يفسّر", "s": ["How do you interpret the ending of the film?", "She interpreted his silence as a yes.", "Dreams can be interpreted in many different ways."]}, {"en": "investigate", "ar": "يحقّق في", "s": ["Police are investigating the robbery.", "The team investigated why the app kept crashing.", "Scientists are investigating the effects of the new drug."], "g": "exam"}, {"en": "justify", "ar": "يبرّر", "s": ["How can you justify spending so much money on shoes?", "He tried to justify his decision to the manager.", "Nothing can justify violence."]}, {"en": "maintain", "ar": "يحافظ على", "s": ["It is important to maintain a healthy weight.", "They maintained contact even after moving to different countries.", "Old buildings are expensive to maintain."]}, {"en": "obtain", "ar": "يحصل على", "s": ["You must obtain a visa before you travel.", "We obtained the information from official sources.", "She obtained a degree in engineering."], "g": "obtain"}, {"en": "anticipate", "ar": "يتوقّع مسبقًا", "s": ["We didn't anticipate so many people at the event.", "The company anticipates strong sales next year.", "Good writers anticipate the questions their readers might ask."]}, {"en": "propose", "ar": "يقترح رسميًا", "s": ["The manager proposed a new plan to cut costs.", "I propose that we meet again on Monday.", "Several solutions were proposed during the meeting."]}, {"en": "require", "ar": "يتطلّب", "s": ["This job requires good communication skills.", "Learning a language requires daily practice.", "All visitors are required to show their ID."]}, {"en": "summarize", "ar": "يلخّص", "s": ["Can you summarize the article in three sentences?", "At the end of the lesson, the teacher summarized the main points.", "To summarize, the plan is cheap and easy."]}, {"en": "observe", "ar": "يلاحظ", "s": ["Scientists observed the birds for three months.", "I observed that he never ate breakfast.", "Children learn by observing their parents."]}, {"en": "outline", "ar": "يعرض الخطوط العريضة", "s": ["The speaker outlined her plan in ten minutes.", "Please outline your main ideas before you start writing.", "The report outlines three possible solutions."]}, {"en": "highlight", "ar": "يسلّط الضوء على", "s": ["The report highlights the risks of climate change.", "She highlighted the key words in yellow.", "The trip highlighted the differences between the two cultures."]}, {"en": "acknowledge", "ar": "يُقرّ بـ (يعترف رسميًا)", "s": ["The minister acknowledged that mistakes had been made.", "You should acknowledge the sources you use in your essay.", "She finally acknowledged the problem and asked for help."]}]}, {"ar": "لغة أدبية ووصفية", "en": "Literary & descriptive", "words": [{"en": "cruel", "ar": "قاسٍ (يتعمّد الإيذاء)", "s": ["It was cruel of him to laugh at her mistake.", "The story is about a cruel king and a brave servant.", "Life can be cruel to people who have nothing."]}, {"en": "elegant", "ar": "أنيق", "s": ["She wore an elegant black dress to the wedding.", "The hotel has an elegant lobby with marble floors.", "It was a simple but elegant solution to the problem."]}, {"en": "remarkable", "ar": "لافت للنظر", "s": ["She made a remarkable recovery after the accident.", "The book tells the remarkable story of a young explorer.", "It is remarkable how quickly children learn."]}, {"en": "pale", "ar": "شاحب", "s": ["She looked pale and tired after the long night.", "The walls were painted a pale blue.", "His face went pale when he heard the news."]}, {"en": "dramatic", "ar": "مثير ودرامي", "s": ["The film has a dramatic ending that nobody expected.", "There has been a dramatic increase in prices.", "She made a dramatic entrance, wearing a red coat."]}, {"en": "tragic", "ar": "مأساوي", "s": ["Romeo and Juliet is a tragic love story.", "He died in a tragic accident at the age of twenty.", "The war had tragic consequences for the country."]}, {"en": "magnificent", "ar": "رائع ومهيب", "s": ["We had a magnificent view of the mountains.", "The palace is a magnificent building from the 17th century.", "The orchestra gave a magnificent performance."], "g": "great"}, {"en": "silent", "ar": "صامت", "s": ["The room went silent when the teacher walked in.", "He remained silent for a long time before answering.", "The old house stood silent at the end of the street."]}, {"en": "lively", "ar": "مفعم بالحيوية", "s": ["The market is always lively on Friday mornings.", "We had a lively discussion about the film.", "She is a lively girl who loves meeting new people."]}, {"en": "shine", "ar": "يلمع (يسطع)", "s": ["The sun was shining when we left the house.", "Her eyes shone with excitement.", "The stars shine brightly in the desert sky."]}, {"en": "spectacular", "ar": "مذهل (باهر للعين)", "s": ["The view from the top of the mountain was spectacular.", "The city ended the festival with a spectacular show of lights.", "He scored a spectacular goal in the final minute."], "g": "great"}, {"en": "bitter", "ar": "مرير", "s": ["They had a bitter argument about money.", "The coffee tastes bitter without sugar.", "She felt bitter about losing her job."]}, {"en": "fascinating", "ar": "آسِر (مثير للاهتمام جدًّا)", "s": ["I found the documentary about the ocean fascinating.", "She told us a fascinating story about her grandfather.", "It is fascinating to watch how children learn languages."]}, {"en": "desperate", "ar": "يائس", "s": ["The desperate man begged for help.", "After three days without food, they were desperate.", "She was desperate to find her lost cat."]}, {"en": "horrible", "ar": "فظيع", "s": ["We had horrible weather for the whole trip.", "The medicine has a horrible taste.", "It was a horrible thing to say to a friend."]}, {"en": "whisper", "ar": "يهمس", "s": ["She whispered the answer in my ear.", "Please whisper; the baby is sleeping.", "\"Don't look back,\" he whispered."]}, {"en": "ghost", "ar": "شبح", "s": ["People say a ghost lives in the old castle.", "She looked as if she had seen a ghost.", "He loves telling ghost stories at night."]}, {"en": "stare", "ar": "يحدّق", "s": ["Don't stare at people; it's rude.", "He sat staring out of the window for hours.", "She stared at the letter in shock."]}, {"en": "wander", "ar": "يتجوّل بلا هدف", "s": ["We spent the afternoon wandering around the old town.", "My mind started to wander during the long lecture.", "The lost dog wandered the streets for days."]}, {"en": "creature", "ar": "مخلوق", "s": ["The forest was full of strange creatures.", "In the story, a creature comes out of the sea every night.", "Even the smallest creature has a role in nature."]}, {"en": "shadow", "ar": "ظلّ", "s": ["The tree cast a long shadow across the garden.", "A dark shadow moved behind the curtain.", "He has lived in the shadow of his famous brother."]}, {"en": "darkness", "ar": "ظلام", "s": ["The room was in complete darkness.", "We walked home through the darkness.", "After the darkness of winter, spring feels like a gift."]}, {"en": "legend", "ar": "أسطورة", "s": ["According to legend, the castle is haunted.", "The singer became a legend in her own lifetime.", "Old legends tell of a city under the sea."], "g": "myth"}, {"en": "myth", "ar": "خرافة", "s": ["It is a myth that we only use ten percent of our brain.", "Greek myths are full of gods and heroes.", "The idea that money brings happiness is a myth."], "g": "myth"}, {"en": "plot", "ar": "حبكة القصة", "s": ["The plot of the film was hard to follow.", "I won't tell you the plot; you should read the book.", "The novel has a simple plot but wonderful characters."]}, {"en": "tale", "ar": "حكاية", "s": ["My grandmother told us tales about her childhood.", "It's a tale of love, war and betrayal.", "The book is a collection of folk tales from Oman."], "g": "myth"}, {"en": "atmosphere", "ar": "جوّ (عام)", "s": ["The restaurant has a warm and friendly atmosphere.", "There was a tense atmosphere in the room.", "The writer creates a dark atmosphere in the first chapter."]}, {"en": "metaphor", "ar": "استعارة (تشبيه بلاغي)", "s": ["\"Time is money\" is a common metaphor.", "The poet uses the sea as a metaphor for freedom.", "Can you explain the metaphor in the last line?"]}, {"en": "poetry", "ar": "الشِّعر", "s": ["She has been writing poetry since she was a child.", "Arabic poetry has a long and rich history.", "We studied modern poetry at school this term."]}, {"en": "mysterious", "ar": "غامض", "s": ["A mysterious stranger arrived in the village.", "She disappeared in mysterious circumstances.", "The old house had a mysterious atmosphere."]}, {"en": "nightmare", "ar": "كابوس", "s": ["I had a nightmare about failing my exams.", "The journey home was a complete nightmare.", "The child woke up crying after a nightmare."]}, {"en": "gentle", "ar": "لطيف وهادئ", "s": ["He spoke in a gentle voice to the frightened child.", "A gentle wind was blowing from the sea.", "Be gentle with the cat; she's very old."]}, {"en": "smooth", "ar": "ناعم الملمس (أملس)", "s": ["The stone was smooth after years in the river.", "Her skin felt soft and smooth.", "The road became smooth after they repaired it."]}, {"en": "weird", "ar": "غريب الأطوار", "s": ["I had a weird dream last night.", "He has some weird ideas about food.", "It's weird that nobody answered the phone."]}, {"en": "scream", "ar": "يصرخ", "s": ["She screamed when she saw the spider.", "We heard someone screaming for help.", "The children were screaming with excitement."]}]}, {"ar": "المشاعر والشخصية", "en": "Emotions & personality", "words": [{"en": "anxious", "ar": "قلِق", "s": ["She was anxious about her exam results.", "I always feel anxious before I speak in public.", "Parents become anxious when their children come home late."], "g": "worry"}, {"en": "ashamed", "ar": "خجلان من فعله", "s": ["He was ashamed of his behavior at the party.", "There's nothing to be ashamed of; everyone makes mistakes.", "I felt ashamed that I had lied to her."]}, {"en": "confident", "ar": "واثق", "s": ["She felt confident that she would win.", "He is a confident speaker who never seems nervous.", "Practice will make you more confident."]}, {"en": "curious", "ar": "فضولي", "s": ["Children are naturally curious about the world.", "I'm curious to know what happened next.", "The curious cat climbed into the box."]}, {"en": "delighted", "ar": "مسرور جدًا", "s": ["I'm delighted to hear about your new job.", "She was delighted with her birthday present.", "We would be delighted to come to your wedding."], "g": "happy"}, {"en": "disappointed", "ar": "خائب الأمل", "s": ["I was disappointed that the concert was cancelled.", "His parents were disappointed with his grades.", "Fans were disappointed by the team's performance."], "g": "let"}, {"en": "embarrassed", "ar": "محرَج", "s": ["I was so embarrassed when I fell on the stage.", "She felt embarrassed about forgetting his name.", "He gave an embarrassed laugh."]}, {"en": "enthusiastic", "ar": "متحمّس", "s": ["The students were enthusiastic about the trip.", "She is an enthusiastic member of the drama club.", "The audience gave an enthusiastic response."]}, {"en": "furious", "ar": "غاضب جدًّا", "s": ["He was furious when he found out the truth.", "My father was furious that I had come home so late.", "She gave me a furious look and left the room."]}, {"en": "grateful", "ar": "ممتنّ", "s": ["I'm grateful for all your help.", "We are grateful to everyone who donated money.", "She was grateful that nobody was hurt."]}, {"en": "guilty", "ar": "مذنب (يشعر بالذنب)", "s": ["I feel guilty about not calling my mother.", "The jury found him guilty of theft.", "She had a guilty look on her face."]}, {"en": "depressed", "ar": "مكتئب", "s": ["He felt depressed after losing his job.", "Many people feel depressed during long, dark winters.", "She was too depressed to go out with her friends."]}, {"en": "lonely", "ar": "وحيد", "s": ["She felt lonely after moving to a new city.", "Old people often live lonely lives.", "It can be lonely working from home."]}, {"en": "miserable", "ar": "بائس وتعيس", "s": ["He looked miserable after losing the game.", "The weather was cold and miserable all week.", "She was miserable in her old job."]}, {"en": "relieved", "ar": "مرتاح (بعد زوال القلق)", "s": ["I was relieved to hear that you got home safely.", "She looked relieved when the exam was over.", "We were relieved that nobody was injured."]}, {"en": "satisfied", "ar": "راضٍ", "s": ["Are you satisfied with your new phone?", "The teacher was satisfied with our work.", "Most customers are satisfied with the service."]}, {"en": "upset", "ar": "منزعج ومستاء", "s": ["She was upset because her friend forgot her birthday.", "Don't get upset; it was only a joke.", "He was upset by the bad news."]}, {"en": "impatient", "ar": "نافد الصبر", "s": ["Don't be so impatient; the bus will come soon.", "The passengers grew impatient as the delay continued.", "He is impatient with people who talk too slowly."]}, {"en": "ambitious", "ar": "طَموح", "s": ["She is ambitious and wants to run her own company.", "The government has an ambitious plan to build new schools.", "Ambitious students often take extra courses."]}, {"en": "honest", "ar": "صادق (أمين)", "s": ["Please be honest and tell me what you really think.", "She is an honest person who never lies.", "To be honest, I didn't enjoy the film."]}, {"en": "generous", "ar": "كريم", "s": ["It was very generous of you to pay for dinner.", "He is generous with his time and always helps others.", "They received a generous gift from their grandparents."]}, {"en": "loyal", "ar": "وفيّ", "s": ["Dogs are loyal animals.", "She has been a loyal friend for twenty years.", "The brand has many loyal customers."]}, {"en": "modest", "ar": "متواضع", "s": ["He is very modest about his achievements.", "They live in a modest house near the beach.", "Despite her fame, she remained modest."]}, {"en": "patient", "ar": "صبور", "s": ["Be patient; the bus will come soon.", "Teachers need to be patient with young children.", "She is a patient listener."]}, {"en": "reliable", "ar": "يُعتمد عليه", "s": ["He is a reliable worker who is never late.", "We need a reliable source of information.", "My old car is still very reliable."]}, {"en": "sensible", "ar": "عاقل وحكيم", "s": ["It would be sensible to save some money.", "She is a sensible girl who makes good decisions.", "Wear sensible shoes for the hike."]}, {"en": "sensitive", "ar": "حسّاس", "s": ["She is very sensitive to criticism.", "This is a sensitive topic, so be careful.", "My skin is sensitive to the sun."]}, {"en": "determined", "ar": "مصمِّم (عازم)", "s": ["She was determined to finish the race.", "He is a determined student who never gives up.", "They were determined to win the next match."]}, {"en": "shy", "ar": "خجول", "s": ["He was too shy to ask her to dance.", "The shy little girl hid behind her mother.", "Don't be shy; come and join us."]}, {"en": "cheerful", "ar": "مَرِح", "s": ["She is always cheerful, even on Monday mornings.", "The room was painted in cheerful colors.", "He gave us a cheerful wave."], "g": "happy"}, {"en": "calm", "ar": "هادئ", "s": ["Stay calm and listen to the instructions.", "The sea was calm and blue.", "She has a calm personality."]}, {"en": "mood", "ar": "مزاج", "s": ["I'm in a good mood today.", "He was in a bad mood after the meeting.", "Music can change your mood quickly."]}, {"en": "courage", "ar": "شجاعة", "s": ["It takes courage to admit your mistakes.", "She showed great courage during the fire.", "He finally found the courage to speak."]}, {"en": "sympathy", "ar": "تعاطف", "s": ["I have a lot of sympathy for people who lost their homes.", "She showed no sympathy for his problems.", "We would like to express our sympathy to the family."]}, {"en": "careless", "ar": "مُهمِل (غير منتبه)", "s": ["It was careless of you to leave the door open.", "He made a few careless mistakes in the exam.", "A careless driver caused the accident."]}]}, {"ar": "العمل والمال", "en": "Work & money", "words": [{"en": "wage", "ar": "أجر (بالساعة أو الأسبوع)", "s": ["The workers are asking for higher wages.", "He earns a weekly wage at the factory.", "The minimum wage was raised last year."], "g": "pay"}, {"en": "income", "ar": "دخل", "s": ["Many families live on a low income.", "Tourism is the main source of income for the island.", "You have to pay tax on your income."], "g": "pay"}, {"en": "profit", "ar": "ربح", "s": ["The shop made a profit of 5,000 dollars last month.", "They sold the house at a large profit.", "The company's profits fell this year."]}, {"en": "budget", "ar": "ميزانية", "s": ["We have a budget of 200 rials for the trip.", "The project went over budget.", "The government announced a new budget for education."]}, {"en": "debt", "ar": "دَين", "s": ["He is in debt after buying a new car.", "It took them ten years to pay off their debts.", "Many students leave university with huge debts."], "g": "owe"}, {"en": "loan", "ar": "قرض", "s": ["She took out a loan to start her business.", "The bank refused to give him a loan.", "We paid back the loan in three years."], "g": "owe"}, {"en": "invest", "ar": "يستثمر", "s": ["He invested his savings in a small restaurant.", "The country is investing heavily in renewable energy.", "It's wise to invest time in learning new skills."]}, {"en": "afford", "ar": "يستطيع تحمّل التكلفة", "s": ["We can't afford a new car this year.", "How can they afford such an expensive house?", "I can't afford to waste any more time."]}, {"en": "pension", "ar": "معاش تقاعدي", "s": ["My grandfather lives on his pension.", "She will receive a good pension when she retires.", "Many workers worry about their pensions."]}, {"en": "hire", "ar": "يوظّف", "s": ["The company hired ten new engineers.", "The restaurant is hiring waiters for the summer.", "They hired a lawyer to help them."]}, {"en": "resign", "ar": "يستقيل", "s": ["The manager resigned after the scandal.", "She resigned from her job to travel the world.", "He refused to resign despite the criticism."], "g": "leave"}, {"en": "retire", "ar": "يتقاعد", "s": ["My father retired at the age of sixty.", "She plans to retire early and live by the sea.", "Many players retire from football in their thirties."], "g": "leave"}, {"en": "promotion", "ar": "ترقية", "s": ["She got a promotion after only a year.", "He is hoping for a promotion to manager.", "Hard work often leads to promotion."]}, {"en": "unemployed", "ar": "عاطل عن العمل", "s": ["He has been unemployed for six months.", "The government is trying to help unemployed young people.", "She was unemployed after the factory closed."]}, {"en": "applicant", "ar": "متقدّم (لوظيفة أو مقعد)", "s": ["There were over two hundred applicants for the job.", "Applicants must send their CV by Friday.", "The university accepts only the best applicants."]}, {"en": "entrepreneur", "ar": "رائد أعمال", "s": ["She became a successful entrepreneur at the age of twenty-five.", "The city offers support to young entrepreneurs.", "Every entrepreneur takes risks when starting a business."]}, {"en": "deadline", "ar": "موعد نهائي", "s": ["The deadline for applications is Friday.", "We worked all night to meet the deadline.", "I missed the deadline by one day."]}, {"en": "insurance", "ar": "تأمين", "s": ["Do you have health insurance?", "The insurance paid for the damage to the car.", "Travel insurance is important when you go abroad."]}, {"en": "receipt", "ar": "إيصال (فاتورة شراء)", "s": ["Keep the receipt in case you want to return the shirt.", "The cashier handed me the receipt.", "I can't find the receipt for the new phone."]}, {"en": "qualification", "ar": "مؤهّل", "s": ["You need a teaching qualification for this job.", "He left school without any qualifications.", "What qualifications do you have?"]}, {"en": "negotiate", "ar": "يتفاوض", "s": ["They are negotiating a new contract with the union.", "You can often negotiate a lower price.", "The two countries negotiated a peace agreement."]}, {"en": "contract", "ar": "عقد", "s": ["She signed a two-year contract with the club.", "Read the contract carefully before you sign it.", "His contract ends in December."]}, {"en": "client", "ar": "عميل (لخدمة)", "s": ["The lawyer met her client at the court.", "We have clients all over the world.", "The designer showed the client three ideas."]}, {"en": "purchase", "ar": "شراء", "s": ["You can return the item within 30 days of purchase.", "Buying a house is the biggest purchase most people make.", "They purchased new equipment for the lab."]}, {"en": "currency", "ar": "عُملة", "s": ["The Omani rial is a strong currency.", "You can exchange currency at the airport.", "What currency do they use in Japan?"]}, {"en": "discount", "ar": "خصم", "s": ["Students get a 20% discount on train tickets.", "The shop is offering discounts on all shoes.", "Can you give me a discount if I buy two?"]}, {"en": "expense", "ar": "مصروف (تكلفة)", "s": ["Travel expenses will be paid by the company.", "Food is our biggest monthly expense.", "They built a pool at great expense."]}, {"en": "tax", "ar": "ضريبة", "s": ["The government raised taxes on cigarettes.", "Prices include tax.", "Everyone who works must pay income tax."]}, {"en": "economy", "ar": "اقتصاد", "s": ["The economy grew by 3% last year.", "Tourism is important for the local economy.", "The global economy is changing fast."]}, {"en": "wealth", "ar": "ثروة", "s": ["He made his wealth in the oil industry.", "Health is more important than wealth.", "The country's wealth comes from natural resources."]}, {"en": "bargain", "ar": "صفقة رابحة (سعر رخيص)", "s": ["This jacket was a real bargain at only ten rials.", "She loves looking for bargains in the market.", "At that price, the laptop is a bargain."]}, {"en": "fee", "ar": "رسوم", "s": ["The entrance fee is five rials.", "University fees have increased this year.", "The doctor charges a small fee for each visit."]}, {"en": "competitor", "ar": "منافس", "s": ["The company lowered its prices to beat its competitors.", "She was the youngest competitor in the race.", "Our main competitor opened a new shop next door."]}, {"en": "inflation", "ar": "التضخّم (ارتفاع الأسعار)", "s": ["Inflation has made food much more expensive.", "The bank raised interest rates to control inflation.", "Wages have not kept up with inflation."]}, {"en": "staff", "ar": "طاقم العمل", "s": ["The hotel staff were very friendly.", "We need more staff during the summer.", "All staff must attend the meeting."]}]}, {"ar": "التقنية والإعلام", "en": "Technology & media", "words": [{"en": "database", "ar": "قاعدة بيانات", "s": ["The library keeps all its books in a database.", "Our customers' details are stored in a secure database.", "She searched the database for the student's name."]}, {"en": "software", "ar": "برمجيات", "s": ["You need to install new software on your computer.", "The company develops software for hospitals.", "This software is free to download."]}, {"en": "password", "ar": "كلمة المرور", "s": ["Never share your password with anyone.", "I forgot my password and had to reset it.", "Choose a strong password with numbers and symbols."]}, {"en": "update", "ar": "يحدّث", "s": ["You should update your apps regularly.", "The website is updated every day.", "My phone updated itself during the night."]}, {"en": "install", "ar": "يثبّت (برنامجًا)", "s": ["I installed the game on my laptop.", "They are installing new lights in the street.", "The app takes a minute to install."]}, {"en": "delete", "ar": "يحذف", "s": ["I accidentally deleted all my photos.", "Please delete the old files from the computer.", "He deleted the message before anyone could read it."]}, {"en": "access", "ar": "وصول (إمكانية الدخول)", "s": ["Students have free access to the library.", "You need a password to access the files.", "Many villages still have no access to the internet."]}, {"en": "edit", "ar": "يحرّر (يعدّل نصًّا أو فيديو)", "s": ["She spent the evening editing her video.", "You can edit the document after you save it.", "The article was edited before it was published."]}, {"en": "account", "ar": "حساب", "s": ["I created a new account on the website.", "Someone hacked my email account.", "He opened a bank account for his son."]}, {"en": "attach", "ar": "يُرفق", "s": ["I have attached the report to this email.", "Please attach a photo to your application.", "He forgot to attach the file again."]}, {"en": "virtual", "ar": "افتراضي", "s": ["The museum offers a virtual tour online.", "In the game, you can build a virtual city.", "We had a virtual meeting on Zoom."]}, {"en": "click", "ar": "ينقر", "s": ["Click the button to start the download.", "She clicked on the link and the page opened.", "Double-click the icon to open the program."]}, {"en": "bug", "ar": "خلل برمجي", "s": ["The new version fixes several bugs.", "A bug in the app caused it to close suddenly.", "The programmers worked all night to find the bug."]}, {"en": "keyboard", "ar": "لوحة المفاتيح", "s": ["I spilled coffee on my keyboard.", "She types very fast on the keyboard.", "This keyboard has Arabic and English letters."]}, {"en": "artificial", "ar": "اصطناعي", "s": ["Artificial intelligence is changing many jobs.", "The flowers on the table are artificial.", "This juice contains no artificial colours."]}, {"en": "version", "ar": "نسخة (إصدار)", "s": ["Download the latest version of the app.", "The film is different from the book version.", "There is a free version and a paid version."]}, {"en": "automatic", "ar": "تلقائي (آلي)", "s": ["The doors are automatic, so they open by themselves.", "My phone installs automatic updates every night.", "He drives a car with an automatic gearbox."]}, {"en": "robot", "ar": "روبوت (إنسان آلي)", "s": ["Robots are used to build cars in factories.", "The children built a small robot at school.", "In the future, robots may help in hospitals."]}, {"en": "innovation", "ar": "ابتكار", "s": ["The company is known for its innovation and new ideas.", "Smartphones were a major innovation in communication.", "The government supports innovation in technology."]}, {"en": "channel", "ar": "قناة", "s": ["Which channel is the match on?", "She started a cooking channel on YouTube.", "Change the channel; this show is boring."]}, {"en": "content", "ar": "محتوى", "s": ["The website has a lot of useful content.", "Parents should check the content of the games their children play.", "He creates content for social media."]}, {"en": "viewer", "ar": "مشاهِد", "s": ["The show attracted millions of viewers.", "Viewers can vote for their favourite singer.", "The programme received complaints from viewers."]}, {"en": "broadcast", "ar": "يبثّ (إذاعيًا)", "s": ["The interview was broadcast on national TV.", "The match will be broadcast live at eight.", "The radio station broadcasts news every hour."]}, {"en": "headline", "ar": "عنوان رئيسي (في الأخبار)", "s": ["The news made headlines around the world.", "I only read the headlines this morning.", "The headline was misleading."]}, {"en": "documentary", "ar": "فيلم وثائقي", "s": ["We watched a documentary about life in the desert.", "She is making a documentary about climate change.", "The documentary won an award last year."]}, {"en": "journalism", "ar": "الصحافة (مهنة)", "s": ["She studied journalism at university.", "Good journalism depends on checking the facts.", "He left journalism to start his own business."]}, {"en": "trend", "ar": "توجّه رائج", "s": ["There is a growing trend towards working from home.", "She always follows the latest fashion trends.", "The trend started on social media."]}, {"en": "coverage", "ar": "تغطية إعلامية", "s": ["The election received wide media coverage.", "The channel provides live coverage of the match.", "There was little coverage of the event in the newspapers."]}, {"en": "episode", "ar": "حلقة (من مسلسل أو برنامج)", "s": ["I missed the last episode of the series.", "Each episode lasts about forty minutes.", "The new episode will be available on Friday."]}, {"en": "icon", "ar": "أيقونة (رمز على الشاشة)", "s": ["Click the icon at the top of the screen.", "The app icon is a small blue bird.", "Drag the icon to the bin to delete the file."]}, {"en": "battery", "ar": "بطارية", "s": ["My phone battery is almost dead.", "The battery lasts for two days.", "You need to change the batteries in the remote."]}, {"en": "charge", "ar": "يشحن", "s": ["I need to charge my phone.", "The car takes four hours to charge.", "Don't charge your laptop overnight."]}, {"en": "crash", "ar": "يتعطّل فجأة (برنامج أو جهاز)", "s": ["My computer crashed and I lost all my work.", "The game keeps crashing on my phone.", "The website crashed because too many people visited it."]}, {"en": "privacy", "ar": "خصوصية", "s": ["Many people worry about their online privacy.", "Celebrities have little privacy.", "Please respect my privacy."]}, {"en": "launch", "ar": "يطلق (منتجًا)", "s": ["The company will launch its new phone next month.", "They launched a campaign to stop bullying.", "The game was launched in 2020."]}]}, {"ar": "المجتمع والعلاقات", "en": "Society & relationships", "words": [{"en": "immigrant", "ar": "مهاجر (إلى البلد)", "s": ["Many immigrants came to the city looking for work.", "Her parents were immigrants from India.", "The country has a long history of welcoming immigrants."]}, {"en": "resident", "ar": "ساكن (مقيم في مكان)", "s": ["Local residents complained about the noise.", "The building has over a hundred residents.", "Only residents can park in this street."]}, {"en": "relative", "ar": "قريب (من العائلة)", "s": ["We visit our relatives during Eid.", "Most of my relatives live in Muscat.", "He is a distant relative of my mother."]}, {"en": "sibling", "ar": "أخ أو أخت (شقيق)", "s": ["I have three siblings: two brothers and a sister.", "Siblings often argue, but they also support each other.", "She is the oldest of five siblings."]}, {"en": "generation", "ar": "جيل", "s": ["Three generations of the family live in the same house.", "The younger generation spends a lot of time online.", "This tradition has passed from generation to generation."]}, {"en": "ancestor", "ar": "جَدّ من الأجداد (سلف)", "s": ["Our ancestors lived in this valley for centuries.", "He tried to learn more about his ancestors.", "The tradition was passed down from our ancestors."]}, {"en": "custom", "ar": "عُرف وعادة اجتماعية", "s": ["It is the custom to remove your shoes before entering a house.", "Local customs are different in every region.", "Shaking hands is a common custom in many countries."], "g": "custom"}, {"en": "citizen", "ar": "مواطن", "s": ["Every citizen has the right to vote.", "She became a British citizen last year.", "Good citizens obey the law."]}, {"en": "childhood", "ar": "طفولة", "s": ["She spent her childhood in a small village.", "I have happy memories of my childhood.", "They have been friends since childhood."]}, {"en": "poverty", "ar": "فقر", "s": ["Millions of people live in poverty.", "The government wants to reduce poverty.", "He grew up in poverty but became a successful doctor."]}, {"en": "volunteer", "ar": "متطوّع", "s": ["We need volunteers to help at the festival.", "She works as a volunteer at the hospital.", "Volunteers cleaned the beach on Saturday."]}, {"en": "friendship", "ar": "صداقة", "s": ["Their friendship lasted for more than forty years.", "Trust is the most important part of any friendship.", "The trip made our friendship even stronger."]}, {"en": "donate", "ar": "يتبرّع", "s": ["She donated money to the new hospital.", "Many people donate blood every year.", "He donated his old clothes to charity."]}, {"en": "victim", "ar": "ضحيّة", "s": ["The victims of the accident were taken to hospital.", "She was the victim of an online scam.", "The charity supports victims of violence."]}, {"en": "witness", "ar": "شاهد", "s": ["The police are looking for witnesses to the accident.", "The witness told the court what she saw.", "There were no witnesses to the crime."]}, {"en": "justice", "ar": "عدالة", "s": ["The families of the victims want justice.", "He studied law because he believes in justice.", "The system of justice must be fair to everyone."]}, {"en": "protest", "ar": "احتجاج", "s": ["Thousands joined the protest against the new law.", "Students held a protest outside the university.", "They left the meeting in protest."]}, {"en": "minority", "ar": "أقلّية", "s": ["Only a minority of students failed the exam.", "The country has many ethnic minorities.", "Smokers are now a minority."]}, {"en": "majority", "ar": "أغلبية", "s": ["The majority of people voted for the plan.", "The majority of my friends live nearby.", "In the majority of cases, the problem is easy to fix."]}, {"en": "homeless", "ar": "مشرّد (بلا مأوى)", "s": ["The charity provides food for homeless people.", "The flood left hundreds of families homeless.", "He was homeless for two years before finding a job."]}, {"en": "elderly", "ar": "مسنّ", "s": ["She takes care of her elderly parents.", "The bus is free for elderly people.", "Many elderly people feel lonely."]}, {"en": "marriage", "ar": "زواج", "s": ["Their marriage lasted fifty years.", "Marriage is an important step in life.", "They celebrated their marriage with a big party."]}, {"en": "divorce", "ar": "طلاق", "s": ["Her parents got a divorce when she was ten.", "The number of divorces has increased.", "After the divorce, he moved to another city."]}, {"en": "respect", "ar": "احترام", "s": ["Children should show respect to their elders.", "I have great respect for teachers.", "She earned the respect of her colleagues."]}, {"en": "trust", "ar": "يثق (ثقة)", "s": ["I trust my brother completely.", "Don't trust everything you read online.", "It takes years to build trust."]}, {"en": "apologize", "ar": "يعتذر", "s": ["He apologized for being late.", "You should apologize to your sister.", "I apologize for the mistake in the email."]}, {"en": "forgive", "ar": "يسامح", "s": ["Please forgive me; I didn't mean to hurt you.", "She never forgave him for lying.", "It's not easy to forgive someone who betrayed you."]}, {"en": "violence", "ar": "عنف", "s": ["The film contains scenes of violence.", "We must stop violence against children.", "There was no violence during the protest."]}, {"en": "theft", "ar": "سرقة", "s": ["The police are investigating the theft of a car.", "Theft is a serious crime in every country.", "He reported the theft of his wallet."]}, {"en": "influence", "ar": "تأثير", "s": ["Parents have a strong influence on their children.", "Social media has a huge influence on young people.", "She used her influence to help others."]}, {"en": "identity", "ar": "هويّة", "s": ["Language is an important part of our identity.", "The police discovered the identity of the thief.", "You need to show proof of identity at the airport."]}, {"en": "conflict", "ar": "نزاع", "s": ["The conflict between the two countries lasted for years.", "There is often conflict between parents and teenagers.", "They tried to solve the conflict peacefully."]}, {"en": "rely", "ar": "يعتمد على (يتّكل)", "s": ["You can rely on me to help you.", "Many families rely on farming for their income.", "Don't rely too much on your phone for directions."]}, {"en": "blame", "ar": "يلوم", "s": ["Don't blame me for your mistakes.", "The driver blamed the weather for the accident.", "She blamed herself for what happened."]}, {"en": "interact", "ar": "يتفاعل", "s": ["Children learn by interacting with others.", "The teacher encourages students to interact in English.", "He finds it hard to interact with people he doesn't know."]}]}, {"ar": "السفر والأماكن", "en": "Travel & places", "words": [{"en": "destination", "ar": "وجهة", "s": ["Salalah is a popular summer destination.", "We reached our destination after six hours.", "What is your favorite holiday destination?"]}, {"en": "overseas", "ar": "في الخارج (وراء البحار)", "s": ["She has been working overseas for three years.", "Many students choose to study overseas.", "The company sells most of its products overseas."]}, {"en": "accommodation", "ar": "سكن (مكان الإقامة)", "s": ["The price includes flights and accommodation.", "It's hard to find cheap accommodation in summer.", "Student accommodation is close to the campus."]}, {"en": "visa", "ar": "تأشيرة", "s": ["You need a visa to visit that country.", "My visa expires next month.", "He applied for a student visa."]}, {"en": "fare", "ar": "أجرة (النقل)", "s": ["The bus fare has gone up again.", "Children travel for half fare.", "How much is the taxi fare to the airport?"]}, {"en": "terminal", "ar": "صالة المطار (مبنى الركّاب)", "s": ["Our flight leaves from Terminal 2.", "There is a free bus between the terminals.", "We waited in the terminal for three hours."]}, {"en": "cabin", "ar": "مقصورة (في طائرة أو سفينة)", "s": ["The cabin crew served drinks during the flight.", "We booked a cabin with a view of the sea.", "Please keep your bags under the seat in the cabin."]}, {"en": "departure", "ar": "مغادرة", "s": ["Check the departure time on your ticket.", "The departure was delayed because of fog.", "Please arrive two hours before departure."]}, {"en": "arrival", "ar": "وصول", "s": ["The arrival of the train was announced.", "On arrival, we went straight to the hotel.", "We waited in the arrivals hall."]}, {"en": "delay", "ar": "تأخير", "s": ["There was a two-hour delay at the airport.", "We apologize for the delay.", "Heavy traffic caused long delays."]}, {"en": "cancel", "ar": "يلغي", "s": ["Our flight was cancelled because of the storm.", "I had to cancel my appointment.", "They cancelled the concert at the last minute."]}, {"en": "reservation", "ar": "حجز", "s": ["I made a reservation for two at the restaurant.", "Do you have a reservation?", "We cancelled our hotel reservation."]}, {"en": "shore", "ar": "شاطئ (ضفّة)", "s": ["We walked along the shore at sunset.", "The boat slowly came back to the shore.", "The waves were crashing on the shore."]}, {"en": "cave", "ar": "كهف", "s": ["They explored a cave in the mountains.", "The cave was dark and cold inside.", "People lived in caves thousands of years ago."]}, {"en": "landscape", "ar": "منظر طبيعي (تضاريس)", "s": ["The landscape of the mountains is beautiful.", "Factories changed the landscape of the area.", "The painting shows a desert landscape."], "g": "view"}, {"en": "tunnel", "ar": "نفق", "s": ["The train goes through a long tunnel.", "They built a tunnel under the river.", "There was heavy traffic inside the tunnel."]}, {"en": "highway", "ar": "طريق سريع", "s": ["The highway connects the two cities.", "There was an accident on the highway this morning.", "We drove along the highway for five hours."]}, {"en": "harbor", "ar": "ميناء (مرفأ)", "s": ["Fishing boats were tied up in the harbor.", "The ship sailed out of the harbor at dawn.", "We had dinner at a restaurant by the harbor."]}, {"en": "cliff", "ar": "جُرف (منحدر صخري)", "s": ["The house stands on top of a high cliff.", "Be careful; don't go too close to the edge of the cliff.", "Birds build their nests on the cliffs."]}, {"en": "downtown", "ar": "وسط المدينة", "s": ["We stayed at a hotel downtown.", "The best restaurants are in the downtown area.", "It takes twenty minutes to get downtown by bus."], "g": "area"}, {"en": "rural", "ar": "ريفي", "s": ["She grew up in a rural area far from the city.", "Many rural villages have no hospital.", "Rural life is quieter than city life."]}, {"en": "border", "ar": "حدود (بين دولتين)", "s": ["We crossed the border into the UAE.", "There is a long queue at the border.", "The river forms the border between the two countries."]}, {"en": "tropical", "ar": "استوائي", "s": ["We spent a week on a tropical island.", "Tropical fruits like mangoes grow well here.", "The region has a hot, tropical climate."]}, {"en": "explore", "ar": "يستكشف", "s": ["We spent the week exploring the island.", "Children love to explore new places.", "The museum lets you explore the history of the city."]}, {"en": "remote", "ar": "نائي", "s": ["They live in a remote village in the mountains.", "The island is very remote and hard to reach.", "Internet is slow in remote areas."]}, {"en": "expedition", "ar": "بعثة استكشافية (رحلة منظَّمة)", "s": ["They went on an expedition to the South Pole.", "The expedition took three months to reach the mountain.", "She joined a scientific expedition to the desert."]}, {"en": "district", "ar": "حيّ (منطقة إدارية)", "s": ["We stayed in the old district of the city.", "The business district is full of tall buildings.", "She lives in a quiet district."], "g": "area"}, {"en": "suburb", "ar": "ضاحية", "s": ["They moved to a quiet suburb outside the city.", "Many people live in the suburbs and work in the city.", "The suburb has good schools."], "g": "area"}, {"en": "monument", "ar": "نُصُب تذكاري", "s": ["The monument was built to remember the soldiers.", "Tourists take photos in front of the monument.", "The castle is an important national monument."]}, {"en": "resort", "ar": "منتجع", "s": ["We stayed at a beach resort for a week.", "The ski resort is open from December.", "The resort has three pools."]}, {"en": "cruise", "ar": "رحلة بحرية", "s": ["They went on a cruise around the Mediterranean.", "The cruise ship stopped at five ports.", "A sunset cruise is a great way to see the coast."]}, {"en": "board", "ar": "يصعد (إلى وسيلة نقل)", "s": ["Passengers are now boarding the plane.", "We boarded the train at seven.", "You can't board without a ticket."]}, {"en": "tent", "ar": "خيمة", "s": ["We put up our tent near the river.", "It rained all night, but the tent kept us dry.", "They slept in a tent in the desert."]}, {"en": "attraction", "ar": "معلَم جذب سياحي", "s": ["The old fort is the main tourist attraction in the town.", "The museum is one of the city's top attractions.", "We didn't have time to visit all the attractions."]}, {"en": "nearby", "ar": "قريب (مجاور)", "s": ["We had lunch at a nearby café.", "Is there a pharmacy nearby?", "The children go to a nearby school."]}]}, {"ar": "الصحة ونمط الحياة", "en": "Health & lifestyle", "words": [{"en": "symptom", "ar": "عَرَض (علامة مرض)", "s": ["A high temperature is a common symptom of flu.", "If the symptoms continue, see a doctor.", "Tiredness can be a symptom of many illnesses."]}, {"en": "medication", "ar": "دواء (أدوية)", "s": ["Are you taking any medication at the moment?", "The doctor changed her medication.", "This medication may make you feel sleepy."], "g": "med"}, {"en": "infection", "ar": "عدوى (التهاب)", "s": ["She has an ear infection.", "Wash your hands to prevent infection.", "Doctors use antibiotics to treat a bacterial infection."]}, {"en": "pill", "ar": "حبّة دواء", "s": ["Take one pill twice a day after meals.", "He can't swallow large pills.", "She took a pill for her headache."], "g": "med"}, {"en": "treatment", "ar": "علاج", "s": ["The treatment for this illness is simple.", "She is receiving treatment in hospital.", "There are new treatments for cancer."]}, {"en": "recover", "ar": "يتعافى", "s": ["It took him two months to recover from the operation.", "She is recovering well after her illness.", "The economy is slowly recovering."], "g": "heal"}, {"en": "clinic", "ar": "عيادة", "s": ["The clinic opens at eight in the morning.", "She works at a children's clinic.", "I made an appointment at the dental clinic."]}, {"en": "surgery", "ar": "جراحة", "s": ["She needs surgery on her back.", "He is still recovering from heart surgery.", "The surgery lasted four hours."], "g": "surg"}, {"en": "surgeon", "ar": "جرّاح", "s": ["The surgeon explained the operation to the patient.", "He wants to become a heart surgeon.", "The surgeon worked for six hours without a break."], "g": "surg"}, {"en": "fever", "ar": "حمّى", "s": ["The child has a high fever.", "He stayed home with a fever.", "Drink plenty of water when you have a fever."]}, {"en": "cure", "ar": "علاج شافٍ", "s": ["There is still no cure for the common cold.", "Laughter is the best cure for stress.", "Scientists hope to find a cure soon."], "g": "heal"}, {"en": "heal", "ar": "يلتئم (يُشفى)", "s": ["The cut on my finger healed in a week.", "Broken bones take time to heal.", "Time heals all wounds."], "g": "heal"}, {"en": "injured", "ar": "مُصاب (بجرح)", "s": ["Two people were injured in the accident.", "He was badly injured during the match.", "The injured players could not continue."], "g": "hurt"}, {"en": "nutrition", "ar": "تغذية", "s": ["Good nutrition is important for children's growth.", "The label gives information about nutrition.", "He studied nutrition at university."]}, {"en": "fitness", "ar": "لياقة بدنية", "s": ["Swimming is great for your fitness.", "She goes to a fitness class twice a week.", "Footballers need a high level of fitness."]}, {"en": "muscle", "ar": "عضلة", "s": ["I pulled a muscle while playing tennis.", "Exercise helps build muscle.", "My muscles were sore after the gym."]}, {"en": "lung", "ar": "رئة", "s": ["Smoking damages your lungs.", "She took a deep breath and filled her lungs with air.", "The doctor listened to his lungs."]}, {"en": "throat", "ar": "حَلق (الحنجرة)", "s": ["I have a sore throat and a cold.", "He cleared his throat before speaking.", "Drink some warm tea for your throat."]}, {"en": "cancer", "ar": "سرطان (مرض)", "s": ["Smoking is a major cause of cancer.", "She has recovered from cancer.", "Scientists are working hard to find new cancer treatments."]}, {"en": "wound", "ar": "جُرح", "s": ["The nurse cleaned the wound.", "He had a deep wound on his arm.", "The wound took weeks to heal."], "g": "hurt"}, {"en": "bacteria", "ar": "بكتيريا", "s": ["Wash your hands to remove bacteria.", "Some bacteria are good for your stomach.", "The infection was caused by bacteria."]}, {"en": "immune", "ar": "منيع (مناعيّ)", "s": ["A healthy diet helps your immune system.", "Once you have had the illness, you are immune to it.", "Babies are not yet immune to many diseases."]}, {"en": "obesity", "ar": "السِّمنة", "s": ["Obesity is a growing problem among children.", "Lack of exercise can lead to obesity.", "The government started a campaign against obesity."]}, {"en": "addiction", "ar": "إدمان", "s": ["Phone addiction is common among teenagers.", "He sought help for his addiction to gambling.", "Addiction can destroy families."]}, {"en": "therapy", "ar": "علاج (نفسي أو طبيعي)", "s": ["She is having therapy after the accident.", "Music therapy can help children with stress.", "He goes to physical therapy twice a week."]}, {"en": "mental", "ar": "عقلي ونفسي", "s": ["Exercise is good for your mental health.", "Chess is a game of mental skill.", "She was under a lot of mental pressure."]}, {"en": "painful", "ar": "مؤلم", "s": ["The injury was very painful.", "It was a painful decision to leave home.", "My back is still painful after the fall."], "g": "hurt"}, {"en": "balance", "ar": "توازن", "s": ["It's important to find a balance between work and rest.", "She lost her balance and fell.", "A balanced diet keeps you healthy."]}, {"en": "breathe", "ar": "يتنفّس", "s": ["Breathe in slowly through your nose.", "It was hard to breathe in the smoky room.", "The doctor told me to breathe deeply."]}, {"en": "disability", "ar": "إعاقة", "s": ["The building is accessible for people with disabilities.", "He has a disability, but he still plays sports.", "Students with disabilities receive extra support."]}, {"en": "vitamin", "ar": "فيتامين", "s": ["Oranges are full of vitamin C.", "The sun helps your body make vitamin D.", "She takes vitamins every morning."]}, {"en": "protein", "ar": "بروتين", "s": ["Eggs and fish are good sources of protein.", "Athletes need more protein in their diet.", "This bar contains ten grams of protein."]}, {"en": "healthcare", "ar": "الرعاية الصحية", "s": ["Everyone should have access to good healthcare.", "The country spends a lot on healthcare.", "She works in healthcare as a nurse."]}, {"en": "swallow", "ar": "يبلع", "s": ["Chew your food well before you swallow it.", "It hurts when I swallow.", "The child accidentally swallowed a coin."]}, {"en": "severe", "ar": "شديد (حادّ وخطير)", "s": ["She has a severe headache.", "The storm caused severe damage.", "He was in severe pain after the accident."]}]}, {"ar": "الرأي والنقاش", "en": "Opinion & discussion", "words": [{"en": "disadvantage", "ar": "عيب (نقطة ضعف)", "s": ["The main disadvantage of the plan is its cost.", "Living far from the city has some disadvantages.", "What are the advantages and disadvantages of online learning?"]}, {"en": "claim", "ar": "يدّعي (ادّعاء)", "s": ["He claims that he saw a ghost.", "The company claims its product is the best.", "Nobody believes her claim that she is innocent."]}, {"en": "debate", "ar": "مناظرة (نقاش رسمي)", "s": ["There was a heated debate about the new school rules.", "We had a debate in class about social media.", "The topic is still under debate."]}, {"en": "perspective", "ar": "وجهة نظر", "s": ["Try to see the problem from her perspective.", "Travel gives you a new perspective on life.", "From a historical perspective, this is very important."], "g": "view"}, {"en": "convince", "ar": "يُقنع", "s": ["She convinced me to join the team.", "I'm not convinced that this is a good idea.", "It took hours to convince my father."], "g": "persuade"}, {"en": "persuade", "ar": "يحمل على فعل شيء (يقنع)", "s": ["He persuaded his friends to try the new restaurant.", "Advertisers try to persuade us to buy things.", "Nothing could persuade her to change her mind."], "g": "persuade"}, {"en": "admit", "ar": "يعترف", "s": ["He admitted that he had made a mistake.", "She admitted stealing the money.", "I must admit the film was better than I expected."]}, {"en": "deny", "ar": "ينكر", "s": ["He denied breaking the window.", "She denied that she had been there.", "The minister denied all the rumors."]}, {"en": "insist", "ar": "يُصرّ", "s": ["She insisted on paying for dinner.", "He insisted that he was right.", "My mother insists that we eat together."]}, {"en": "oppose", "ar": "يعارض", "s": ["Many people oppose the new road.", "She strongly opposes any change to the rules.", "The plan was opposed by most teachers."]}, {"en": "proof", "ar": "برهان (إثبات قاطع)", "s": ["Do you have any proof that he took the money?", "There is no proof that the drug works.", "You need proof of address to open an account."]}, {"en": "hence", "ar": "ومن ثَمّ (لهذا السبب)", "s": ["The road was closed, hence the delay.", "The material is light and strong, hence its popularity.", "He was ill, and hence could not attend the meeting."], "g": "so"}, {"en": "consequence", "ar": "عاقبة (نتيجة)", "s": ["You must accept the consequences of your actions.", "Lack of sleep has serious consequences for health.", "As a consequence, the match was cancelled."]}, {"en": "though", "ar": "مع ذلك (في آخر الجملة)", "s": ["The hotel was expensive. It was very clean, though.", "It's a hard job. I enjoy it, though.", "The film was long. The ending was great, though."], "g": "though"}, {"en": "therefore", "ar": "لذلك", "s": ["He was ill and therefore couldn't come.", "The road was closed; therefore, we took another route.", "I think, therefore I am."], "g": "so"}, {"en": "surely", "ar": "لا شكّ أنّ (حتمًا)", "s": ["Surely you don't believe that story?", "Surely there must be an easier way to do this.", "He will surely win if he keeps training."]}, {"en": "advise", "ar": "ينصح", "s": ["The doctor advised me to rest for a week.", "I would advise you to book early.", "She advised him not to accept the offer."]}, {"en": "despite", "ar": "بالرغم من", "s": ["Despite the rain, the match continued.", "He went to work despite feeling ill.", "Despite her fear, she jumped into the water."], "g": "though"}, {"en": "whereas", "ar": "في حين أنّ", "s": ["My brother loves sports, whereas I prefer reading.", "Some students learn quickly, whereas others need more time.", "The north is cold, whereas the south is warm."]}, {"en": "moreover", "ar": "علاوة على ذلك", "s": ["The hotel was cheap; moreover, it was close to the beach.", "The plan is risky. Moreover, it's very expensive.", "He is talented and, moreover, very hardworking."], "g": "more"}, {"en": "furthermore", "ar": "فضلًا عن ذلك", "s": ["The house is too small; furthermore, it's in a noisy area.", "Furthermore, the report shows that costs have doubled.", "The app is free. Furthermore, it has no ads."], "g": "more"}, {"en": "nevertheless", "ar": "ومع ذلك", "s": ["The task was difficult; nevertheless, they finished it.", "It was a small mistake, but nevertheless an important one.", "He was tired. Nevertheless, he kept working."], "g": "but"}, {"en": "otherwise", "ar": "وإلّا", "s": ["Hurry up, otherwise we'll miss the bus.", "Write it down; otherwise you'll forget it.", "Wear a coat, otherwise you'll catch a cold."]}, {"en": "apparently", "ar": "على ما يبدو", "s": ["Apparently, the shop is closed on Fridays.", "He was apparently unaware of the problem.", "Apparently, she's moving to London."]}, {"en": "obviously", "ar": "من الواضح", "s": ["Obviously, you need a passport to travel abroad.", "She was obviously upset about the news.", "He's obviously very talented."]}, {"en": "assumption", "ar": "افتراض", "s": ["The plan is based on the assumption that prices will fall.", "Don't make assumptions about people before you know them.", "His assumption turned out to be wrong."]}, {"en": "controversial", "ar": "مثير للجدل", "s": ["The decision was very controversial.", "He made some controversial comments on TV.", "The film deals with a controversial topic."]}, {"en": "reasonable", "ar": "معقول", "s": ["The price seems reasonable for such a good phone.", "Be reasonable; we can't finish in one day.", "It's a reasonable request."]}, {"en": "valid", "ar": "صالح (مقبول منطقيًا أو رسميًا)", "s": ["You make a valid point.", "This ticket is valid for one month.", "Your passport must be valid for six months."]}, {"en": "criticize", "ar": "ينتقد", "s": ["The film was criticized for being too long.", "She criticized the government's plan.", "Don't criticize him in front of others."]}, {"en": "bias", "ar": "تحيّز", "s": ["The report was criticized for its bias.", "We should read news without bias.", "The judge must decide without any bias."]}, {"en": "doubt", "ar": "شكّ", "s": ["There is no doubt that she is the best player.", "I have doubts about his story.", "If in doubt, ask the teacher."]}, {"en": "logical", "ar": "منطقي", "s": ["There must be a logical explanation for this.", "Her argument was clear and logical.", "It's the logical next step for the company."]}, {"en": "aspect", "ar": "جانب (من مسألة)", "s": ["We discussed every aspect of the problem.", "Money is only one aspect of a job.", "The most interesting aspect of the city is its history."]}, {"en": "attitude", "ar": "موقف (طريقة التفكير)", "s": ["She has a positive attitude towards life.", "His attitude to work has improved.", "Attitudes towards women's work have changed."]}]}, {"ar": "الطبيعة والبيئة", "en": "Nature & environment", "words": [{"en": "environmental", "ar": "بيئي", "s": ["Plastic waste is a serious environmental problem.", "She works for an environmental organization.", "The new factory must follow environmental laws."]}, {"en": "carbon", "ar": "كربون", "s": ["Trees absorb carbon from the air.", "We need to reduce carbon emissions.", "Flying has a large carbon footprint."]}, {"en": "greenhouse", "ar": "الاحتباس الحراري (غازات الدفيئة)", "s": ["Greenhouse gases trap heat in the atmosphere.", "Cars produce a lot of greenhouse gases.", "The greenhouse effect is making the planet warmer."], "g": "heat"}, {"en": "warming", "ar": "احترار (ارتفاع الحرارة)", "s": ["Global warming is melting the ice at the poles.", "Scientists warn about the effects of warming oceans.", "We must act now to slow global warming."], "g": "heat"}, {"en": "waste", "ar": "نُفايات (هدر)", "s": ["Factories produce a lot of waste.", "Don't throw food waste in the sea.", "Buying things you don't need is a waste of money."]}, {"en": "resource", "ar": "مورد", "s": ["Water is a precious resource in the desert.", "The country is rich in natural resources.", "We must use our resources carefully."]}, {"en": "species", "ar": "نوع (من الكائنات)", "s": ["There are thousands of species of birds.", "The Arabian leopard is an endangered species.", "Scientists discovered a new species of fish."]}, {"en": "hurricane", "ar": "إعصار", "s": ["The hurricane destroyed hundreds of homes.", "People left the coast before the hurricane arrived.", "The hurricane brought strong winds and heavy rain."]}, {"en": "habitat", "ar": "موطن طبيعي", "s": ["Cutting down forests destroys animals' natural habitats.", "The zoo tries to copy the animals' habitat.", "Wetlands are an important habitat for birds."]}, {"en": "wildlife", "ar": "الحياة البرّية", "s": ["The island is famous for its wildlife.", "Pollution is harming wildlife in the river.", "We watched a documentary about African wildlife."]}, {"en": "tsunami", "ar": "تسونامي (موجة بحرية عاتية)", "s": ["The earthquake caused a huge tsunami.", "The tsunami reached the coast within minutes.", "Many villages were destroyed by the tsunami."]}, {"en": "destruction", "ar": "دمار", "s": ["The war caused terrible destruction.", "The destruction of the forests affects all of us.", "We saw the destruction left by the storm."], "g": "ruin"}, {"en": "flood", "ar": "فيضان", "s": ["The heavy rain caused floods in the valley.", "Many houses were damaged in the flood.", "The river floods every spring."]}, {"en": "drought", "ar": "جفاف", "s": ["The drought killed most of the crops.", "Farmers are suffering because of the drought.", "Long droughts are becoming more common."]}, {"en": "preserve", "ar": "يصون (يحافظ على حاله)", "s": ["We must preserve these forests for future generations.", "The old town has been carefully preserved.", "Salt was used to preserve fish in the past."], "g": "keep"}, {"en": "earthquake", "ar": "زلزال", "s": ["The earthquake destroyed hundreds of buildings.", "A small earthquake shook the city at midnight.", "Japan has many earthquakes every year."]}, {"en": "shortage", "ar": "نقص (شحّ)", "s": ["There is a shortage of water in summer.", "The country faces a shortage of doctors.", "Food shortages were common during the war."]}, {"en": "emission", "ar": "انبعاث (غازات)", "s": ["Cars are a major source of carbon emissions.", "The country promised to cut emissions by half.", "Factories must reduce their emissions."]}, {"en": "organic", "ar": "عضوي (بلا مواد كيميائية)", "s": ["We only buy organic vegetables.", "Organic farming does not use chemicals.", "Organic food is usually more expensive."]}, {"en": "solar", "ar": "شمسي", "s": ["They installed solar panels on the roof.", "Solar energy is cheap in sunny countries.", "The calculator runs on solar power."]}, {"en": "fuel", "ar": "وقود", "s": ["The car is running out of fuel.", "Oil and gas are fossil fuels.", "Fuel prices have gone up again."]}, {"en": "oxygen", "ar": "أكسجين", "s": ["Plants produce oxygen during the day.", "Fish need oxygen in the water to survive.", "There is less oxygen at the top of high mountains."]}, {"en": "global", "ar": "عالمي", "s": ["Global warming is a serious problem.", "The internet is a global network.", "The company has a global audience."]}, {"en": "fossil", "ar": "أحفورة (مستحاثّة)", "s": ["They found a dinosaur fossil in the desert.", "Oil and gas are fossil fuels.", "The museum has a large collection of fossils."]}, {"en": "soil", "ar": "تربة", "s": ["Plants need good soil to grow.", "The soil here is too dry for farming.", "Rain washed the soil into the river."]}, {"en": "crop", "ar": "محصول", "s": ["Farmers are harvesting their crops.", "Rice is the main crop in this region.", "The storm damaged the crops."]}, {"en": "agriculture", "ar": "الزراعة", "s": ["Agriculture uses most of the country's water.", "Modern agriculture depends on machines.", "He studied agriculture at university."]}, {"en": "seed", "ar": "بذرة", "s": ["Plant the seeds in spring.", "Birds eat the seeds from the trees.", "The farmer saves seeds for next year."]}, {"en": "melt", "ar": "يذوب", "s": ["The ice cream melted in the sun.", "The snow melts quickly in spring.", "Rising temperatures are melting the glaciers."]}, {"en": "forecast", "ar": "توقّعات (الطقس)", "s": ["The weather forecast says it will rain tomorrow.", "According to the forecast, the storm will arrive tonight.", "I always check the forecast before going to the beach."], "g": "weather"}, {"en": "erupt", "ar": "يثور (بركان)", "s": ["The volcano erupted, sending ash into the sky.", "Mount Etna erupts quite often.", "When the volcano erupted, the villagers left their homes."]}, {"en": "damage", "ar": "ضرر", "s": ["The storm caused serious damage to the roads.", "Smoking causes damage to your lungs.", "The damage will cost millions to repair."], "g": "ruin"}, {"en": "conservation", "ar": "الحفاظ على البيئة", "s": ["The group works on the conservation of turtles.", "Water conservation is important in dry countries.", "The area is protected for conservation."], "g": "keep"}, {"en": "sustainable", "ar": "مستدام", "s": ["We need sustainable ways of producing food.", "Is this level of fishing sustainable?", "The company uses sustainable materials."]}, {"en": "harmful", "ar": "ضارّ", "s": ["Smoking is harmful to your health.", "Some chemicals are harmful to fish.", "Too much sun can be harmful to your skin."]}]}];
+const COLORS = ["#4353D6","#0E8C86","#8E3FA8","#C07E05","#D0446B","#2F7D3A","#2F73B5","#B25528","#6E7A12","#1C6C99"];
+const CAP = 35, KEY = "mufradati.v1", DV = 2;
+/* words replaced in data version 2 (levels checked against Oxford 3000/5000): [old en, old ar, index of the new word in DEFAULT] */
+const MIG2 = [[["achieve","يحقق (هدفًا)",3],["identify","يتعرّف على",19],["predict","يتنبّأ",27],["involve","يتضمّن",34]],[["vivid","حيّ وواضح (في الذهن)",0],["ordinary","عادي",3],["striking","لافت ومثير للانتباه",7],["subtle","خفيّ ودقيق",8],["faint","خافت",9],["harsh","قاسٍ",10],["tender","رقيق وحنون",12],["eager","متلهّف",14],["glance","يلقي نظرة سريعة",16],["sigh","يتنهّد",19],["glow","يتوهّج",21],["brilliant","بارع ومتألق",27],["tremendous","هائل",28],["ancient","قديم جدًا (عريق)",30],["fierce","شرس",32]],[["frustrated","محبَط (من عائق)",8],["jealous","غيور",11],["stressed","متوتّر",17],["stubborn","عنيد",19],["selfish","أناني",27],["temper","سرعة الغضب (طبع)",34]],[["salary","راتب",0],["earn","يكسب (مالًا)",8],["colleague","زميل عمل",13],["employer","صاحب العمل",14],["career","مسيرة مهنية",15],["schedule","جدول زمني",17],["task","مهمّة",18],["refund","استرداد المال",24],["manage","يدير",32],["compete","يتنافس",33]],[["device","جهاز",0],["upload","يرفع (ملفًا)",2],["browse","يتصفّح",5],["network","شبكة",7],["digital","رقمي",9],["data","بيانات",11],["storage","مساحة تخزين",12],["user","مستخدِم",13],["feature","ميزة",14],["platform","منصّة",16],["stream","يبثّ أو يشغّل عبر الإنترنت",17],["subscribe","يشترك",18],["audience","جمهور",21],["journalist","صحفي",24],["advertisement","إعلان",25],["review","مراجعة (تقييم منشور)",27],["wireless","لاسلكي",28],["gadget","أداة إلكترونية صغيرة",29]],[["community","مجتمع محلي",0],["neighbor","جار",1],["partner","شريك",3],["tradition","تقليد (عادة متوارثة)",5],["equality","مساواة",8],["charity","جمعية خيرية",11],["crime","جريمة",12],["population","عدد السكان",19],["depend","يعتمد (على)",27],["belong","ينتمي",28],["behavior","سلوك",30],["cooperate","يتعاون",32],["gossip","نميمة (كلام عن الناس)",33],["argue","يتجادل",34]],[["journey","رحلة (مسافة الطريق)",1],["abroad","في الخارج (خارج البلد)",3],["luggage","أمتعة",4],["ferry","عبّارة (سفينة نقل)",5],["passenger","راكب",6],["souvenir","تذكار",12],["sightseeing","زيارة المعالم السياحية",13],["scenery","مناظر خلّابة",15],["coast","ساحل",16],["valley","وادٍ",19],["route","مسار (طريق)",20],["customs","الجمارك",22],["crowded","مزدحم",25],["transport","وسائل النقل",32],["hike","نزهة سير طويلة",33],["local","محلّي",34]],[["injury","إصابة",1],["disease","مرض",3],["prescription","وصفة طبية",6],["ache","ألم مستمر (وجع)",8],["diet","نظام غذائي",12],["habit","عادة (سلوك متكرر)",16],["routine","روتين",17],["exhausted","منهَك",18],["bleed","ينزف",20],["cough","يسعل",21],["allergy","حساسية",22],["pharmacy","صيدلية",23],["physical","جسدي",26],["pulse","نبض",29],["lifestyle","نمط الحياة",32],["addicted","مدمن",33],["overweight","زائد الوزن",34]],[["argument","حجّة",0],["benefit","فائدة",10],["drawback","عيب (سلبية)",11],["evidence","دليل",13],["however","لكن (على أيّ حال)",15],["although","مع أنّ",16],["definitely","بالتأكيد",25],["recommend","يوصي بـ",30],["compromise","حلّ وسط",32]],[["environment","البيئة",0],["climate","مناخ",1],["pollution","تلوّث",2],["recycle","يعيد التدوير",3],["extinct","منقرض",7],["destroy","يدمّر",10],["protect","يحمي",11],["storm","عاصفة",14],["temperature","درجة الحرارة",16],["renewable","متجدّد",18],["energy","طاقة",21],["planet","كوكب",23],["harvest","حصاد",26],["coral","مرجان",27],["tide","المدّ والجزر",28],["volcano","بركان",29],["scarce","نادر (شحيح)",34]]];
+const IC = {
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>',
+  say:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>',
+  chev:'<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>',
+  quiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>',
+  cards:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  save:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
+  moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
+  note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+  noteoff:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><path d="M3 3l18 18"/></svg>',
+  mute:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m22 9-6 6M16 9l6 6"/></svg>',
+  flame:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.6 3.2 2.4 4.9 4 6.6 1.6 1.7 3 3.5 3 6.1A7 7 0 0 1 5 14.7c0-2.3 1-4 2.5-5.4.2 1.8 1 3 2.3 3.6C9.4 9 10.3 5.4 12 2z"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  shuffle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="m15 15 6 6"/><path d="M4 4l5 5"/></svg>'
+};
+
+/* ---------- state ---------- */
+let S = null, CLOUD = null, SYNC = "local", STORE_OK = true;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function fresh(){
+  return { v:1, decks: DEFAULT.map((d, i) => ({ id:"d"+i, u:0, dv:DV, last:null, words: d.words.map((w, j) => ({ id:"d"+i+"w"+j, en:w.en, ar:w.ar, s:w.s.slice(), g:w.g || "", st:"" })) })) };
+}
+function cleanWord(w){
+  if (!w || typeof w.en !== "string" || typeof w.ar !== "string" || !Array.isArray(w.s)) return null;
+  const s = w.s.slice(0,3).map(x => String(x || ""));
+  while (s.length < 3) s.push("");
+  return { id: String(w.id || ("u"+Math.random().toString(36).slice(2,9))), en: w.en.trim().slice(0,60), ar: w.ar.trim().slice(0,80), s, g: String(w.g || ""), st: w.st === "k" || w.st === "m" ? w.st : "" };
+}
+function cleanDeck(d, i){
+  const words = (Array.isArray(d && d.words) ? d.words : []).map(cleanWord).filter(Boolean).slice(0, CAP);
+  const L = d && d.last && typeof d.last === "object" ? { k: +d.last.k || 0, n: +d.last.n || 0, t: +d.last.t || 0 } : null;
+  const out = { id:"d"+i, u: +(d && d.u) || 0, dv: +(d && d.dv) || 1, last: L, words };
+  migrate(out, i);
+  return out;
+}
+const MIGRATED = new Set();
+function migrate(d, i){
+  if (d.dv >= DV) return;
+  const have = new Set(d.words.map(w => w.en.toLowerCase()));
+  (MIG2[i] || []).forEach(([en, ar, j]) => {
+    const k = d.words.findIndex(w => w.en.toLowerCase() === en.toLowerCase() && w.ar === ar);
+    const nw = DEFAULT[i].words[j];
+    if (k < 0 || !nw || have.has(nw.en.toLowerCase())) return;
+    d.words[k] = { id: "d" + i + "x" + j, en: nw.en, ar: nw.ar, s: nw.s.slice(), g: nw.g || "", st: "" };
+    have.add(nw.en.toLowerCase());
+  });
+  d.dv = DV; MIGRATED.add(i);
+}
+function loadLocal(){
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) { const o = JSON.parse(raw); if (o && Array.isArray(o.decks) && o.decks.length === DEFAULT.length) return { v:1, decks: o.decks.map(cleanDeck) }; }
+  } catch (e) { STORE_OK = !!window.localStorage && STORE_OK; }
+  return fresh();
+}
+function saveLocal(){
+  try { localStorage.setItem(KEY, JSON.stringify(S)); STORE_OK = true; } catch (e) { STORE_OK = false; }
+}
+const pending = new Set(); let pushTimer = 0; let pushing = false;
+function touch(i){
+  S.decks[i].u = Date.now();
+  saveLocal();
+  if (CLOUD) { pending.add(i); clearTimeout(pushTimer); pushTimer = setTimeout(push, 700); }
+}
+async function push(){
+  if (!CLOUD || pushing) return;
+  pushing = true;
+  try {
+    while (pending.size) {
+      const i = pending.values().next().value; pending.delete(i);
+      const d = S.decks[i];
+      try { await CLOUD.col.doc("deck"+i).set({ u:d.u, dv:d.dv || DV, last:d.last, words:d.words }); }
+      catch (e) { if (e && e.code === "unavailable") { await new Promise(r => setTimeout(r, 800 + Math.random()*800)); try { await CLOUD.col.doc("deck"+i).set({ u:d.u, dv:d.dv || DV, last:d.last, words:d.words }); } catch (e2) { setSync("local"); } } else { setSync("local"); CLOUD = null; } }
+    }
+  } finally { pushing = false; }
+}
+function setSync(m){ SYNC = m; const el = document.getElementById("sync"); if (el) el.outerHTML = syncHTML(); }
+async function initCloud(){
+  try {
+    const c = window.claude; if (!c || typeof c.use !== "function") return;
+    const [db, user] = await Promise.all([c.use("db"), c.use("user")]);
+    if (!db || !user) return;
+    const uid = await user.id(); if (!uid) return;
+    const col = db.collection("data/users/" + uid);
+    let timedOut = false; const t = setTimeout(() => { timedOut = true; }, 10000);
+    const snap = await col.get(); clearTimeout(t);
+    if (timedOut && !snap) return;
+    const remote = {}; snap.docs.forEach(d => { if (d.exists) remote[d.id] = d.data(); });
+    let changed = false; CLOUD = { db, col };
+    S.decks.forEach((d, i) => {
+      const r = remote["deck"+i];
+      if (r && (+r.u || 0) > (d.u || 0)) { MIGRATED.delete(i); S.decks[i] = cleanDeck(r, i); changed = true; if (MIGRATED.has(i)) { S.decks[i].u = Date.now(); pending.add(i); } }
+      else if (d.u && (!r || (+r.u || 0) < d.u)) pending.add(i);
+    });
+    if (changed) { saveLocal(); render(); }
+    setSync("cloud");
+    if (pending.size) push();
+  } catch (e) { CLOUD = null; }
+}
+
+/* ---------- helpers ---------- */
+const IRREG = { shine:["shone","shining"], forgive:["forgave","forgiven"], bleed:["bled"], seek:["sought"], withdraw:["withdrew","withdrawn"], lose:["lost"], choose:["chose","chosen"], buy:["bought"], think:["thought"], teach:["taught"], catch:["caught"], fight:["fought"], bring:["brought"], take:["took","taken"], give:["gave","given"], write:["wrote","written"], speak:["spoke","spoken"], break:["broke","broken"], drive:["drove","driven"], hide:["hid","hidden"], rise:["rose","risen"], arise:["arose","arisen"], feel:["felt"], keep:["kept"], leave:["left"], meet:["met"], pay:["paid"], say:["said"], sell:["sold"], tell:["told"], build:["built"], spend:["spent"], send:["sent"], lead:["led"], run:["ran"], swim:["swam","swum"], begin:["began","begun"], wear:["wore","worn"], tear:["tore","torn"], bear:["bore","borne"], steal:["stole","stolen"], freeze:["froze","frozen"], shake:["shook","shaken"], forget:["forgot","forgotten"], understand:["understood"], overcome:["overcame"], undertake:["undertook","undertaken"] };
+function forms(word){
+  const w = word.toLowerCase().trim(); const out = new Set([w]);
+  if (/\s/.test(w)) return [...out];
+  const add = x => out.add(x);
+  ["s","es","ed","d","ing","er","ers","ly","ness","ment","ments"].forEach(x => add(w + x));
+  if (/e$/.test(w)) { add(w.slice(0,-1)+"ing"); add(w.slice(0,-1)+"ed"); add(w.slice(0,-1)+"y"); add(w.slice(0,-1)+"ion"); }
+  if (/[^aeiou]y$/.test(w)) { add(w.slice(0,-1)+"ied"); add(w.slice(0,-1)+"ies"); add(w.slice(0,-1)+"ily"); }
+  if (/[^aeiou][aeiou][bdgklmnprt]$/.test(w)) { const l = w.slice(-1); add(w+l+"ed"); add(w+l+"ing"); add(w+l+"er"); }
+  if (/ic$/.test(w)) add(w + "ally");
+  (IRREG[w] || []).forEach(add);
+  return [...out];
+}
+function hl(sentence, word){
+  const F = forms(word).sort((a,b) => b.length - a.length).map(x => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const re = new RegExp("\\b(" + F.join("|") + ")\\b", "gi");
+  const parts = []; let last = 0; const txt = String(sentence); let m;
+  while ((m = re.exec(txt))) { parts.push(esc(txt.slice(last, m.index)), "<mark>", esc(m[0]), "</mark>"); last = m.index + m[0].length; }
+  parts.push(esc(txt.slice(last)));
+  return parts.join("");
+}
+function hasForm(sentence, word){ if (!sentence || !word) return true; const F = forms(word).map(x => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")); return new RegExp("\\b(" + F.join("|") + ")\\b", "i").test(sentence); }
+const canSpeak = typeof window.speechSynthesis !== "undefined" && typeof window.SpeechSynthesisUtterance !== "undefined";
+function speak(text){
+  if (!canSpeak) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = .92; const v = speechSynthesis.getVoices().find(v => /^en(-|_)US/i.test(v.lang)) || speechSynthesis.getVoices().find(v => /^en/i.test(v.lang)); if (v) u.voice = v; speechSynthesis.speak(u); } catch (e) {}
+}
+const RM = matchMedia("(prefers-reduced-motion: reduce)");
+const PREF = { sfx: true, voice: canSpeak, mode: "pick" };
+try { const v = JSON.parse(localStorage.getItem(KEY + ".prefs") || "{}"); if (typeof v.sfx === "boolean") PREF.sfx = v.sfx; if (typeof v.voice === "boolean") PREF.voice = v.voice && canSpeak; if (v.mode === "self" || v.mode === "pick") PREF.mode = v.mode; } catch (e) {}
+const savePref = () => { try { localStorage.setItem(KEY + ".prefs", JSON.stringify(PREF)); } catch (e) {} };
+const SFX = (() => {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  let ctx = null, out = null;
+  function ready(){
+    if (!PREF.sfx || !AC) return false;
+    try {
+      if (!ctx) { ctx = new AC(); out = ctx.createGain(); out.gain.value = .55; const comp = ctx.createDynamicsCompressor(); out.connect(comp); comp.connect(ctx.destination); }
+      if (ctx.state === "suspended") ctx.resume();
+      return true;
+    } catch (e) { return false; }
+  }
+  function tone(f, t, dur, o){
+    o = o || {};
+    const osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.type = o.type || "sine";
+    osc.frequency.setValueAtTime(f, t);
+    if (o.glide) osc.frequency.exponentialRampToValueAtTime(f * o.glide, t + dur);
+    g.gain.setValueAtTime(.0001, t);
+    g.gain.exponentialRampToValueAtTime(o.vol || .2, t + (o.attack || .006));
+    g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    osc.connect(g); g.connect(out); osc.start(t); osc.stop(t + dur + .03);
+  }
+  const bell = (f, t, dur, vol) => { tone(f, t, dur, { vol }); tone(f * 2, t, dur * .55, { vol: vol * .22 }); tone(f * 3.01, t, dur * .3, { vol: vol * .07 }); };
+  const PENTA = [0, 2, 4, 7, 9];
+  const step = (base, k) => base * Math.pow(2, (Math.floor(k / 5) * 12 + PENTA[k % 5]) / 12);
+  const now = () => ctx.currentTime + .01;
+  return {
+    start(){ if (!ready()) return; const t = now(); bell(392, t, .18, .12); bell(523.25, t + .09, .3, .14); },
+    right(streak){ if (!ready()) return; const t = now(), k = Math.min(Math.max(streak - 1, 0), 11); bell(step(523.25, k), t, .2, .18); bell(step(523.25, k + 2), t + .07, .42, .22); },
+    wrong(){ if (!ready()) return; const t = now(); tone(233, t, .26, { type: "triangle", vol: .2, glide: .75 }); tone(185, t + .13, .36, { type: "triangle", vol: .17, glide: .7 }); },
+    combo(n){ if (!ready()) return; const t = now() + .16, base = n >= 10 ? 659.25 : 523.25; [0, 2, 4, 5, 7].forEach((k, j) => bell(step(base * 2, k), t + j * .045, .25, .09)); },
+    tick(){ if (!ready()) return; tone(1320, now(), .035, { type: "square", vol: .025 }); },
+    finish(pct){
+      if (!ready()) return; const t = now();
+      const seq = pct === 100 ? [0, 2, 3, 5, 7, 10] : pct >= 80 ? [0, 2, 3, 5] : pct >= 50 ? [0, 2, 3] : [3, 1];
+      seq.forEach((k, j) => bell(step(392, k), t + j * .1, j === seq.length - 1 ? .9 : .3, .2));
+      if (pct >= 80) { const e = t + seq.length * .1; [0, 2, 4].forEach(k => bell(step(392, k + 5), e, 1.1, .1)); }
+    }
+  };
+})();
+const sayBtn = (en) => canSpeak ? `<span role="button" tabindex="0" class="say" data-act="say" data-say="${esc(en)}" aria-label="انطق ${esc(en)}">${IC.say}</span>` : "";
+const deckStats = d => { let k = 0, m = 0; d.words.forEach(w => { if (w.st === "k") k++; else if (w.st === "m") m++; }); return { k, m, n: d.words.length }; };
+const nWord = n => n === 1 ? "كلمة واحدة" : n === 2 ? "كلمتان" : (n >= 3 && n <= 10) ? n + " كلمات" : n + " كلمة";
+
+/* ---------- routing ---------- */
+let VIEW = { name:"home" };
+function route(){
+  const h = (location.hash || "").replace(/^#/, "");
+  let m;
+  if ((m = /^deck-(\d+)$/.exec(h)) && S.decks[+m[1]]) VIEW = { name:"deck", i:+m[1], filter: VIEW.name === "deck" && VIEW.i === +m[1] ? VIEW.filter : "all", open: VIEW.open || null };
+  else if ((m = /^(quiz|cards)-(\d+)$/.exec(h)) && S.decks[+m[2]]) {
+    const i = +m[2];
+    if (VIEW.name === m[1] && ((m[1] === "quiz" && Q && Q.i === i) || (m[1] === "cards" && C && C.i === i))) return;
+    VIEW = { name:"deck", i, filter:"all" }; history.replaceState(null, "", "#deck-" + i);
+  }
+  else VIEW = { name:"home" };
+  render(); window.scrollTo(0, 0);
+}
+function go(h){ if (location.hash === "#" + h) route(); else location.hash = h; }
+
+/* ---------- views ---------- */
+function syncHTML(){
+  return SYNC === "cloud"
+    ? '<span class="sync cloud" id="sync"><i></i>محفوظ في حسابك</span>'
+    : '<span class="sync" id="sync"><i></i>محفوظ في هذا المتصفح</span>';
+}
+function slotsHTML(d){
+  let h = ""; for (let j = 0; j < CAP; j++) { const w = d.words[j]; h += `<i class="slot ${w ? (w.st || "") : "e"}"></i>`; }
+  return `<div class="slots" aria-hidden="true">${h}</div>`;
+}
+let SPOT = null;
+function pickSpot(){
+  const all = []; S.decks.forEach((d, i) => d.words.forEach(w => all.push([i, w.id])));
+  const miss = all.filter(([i, id]) => (S.decks[i].words.find(w => w.id === id) || {}).st === "m");
+  const pool = miss.length && Math.random() < .6 ? miss : all;
+  SPOT = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+}
+function spotHTML(){
+  if (!SPOT || !S.decks[SPOT[0]].words.some(w => w.id === SPOT[1])) pickSpot();
+  if (!SPOT) return "";
+  const i = SPOT[0], w = S.decks[i].words.find(x => x.id === SPOT[1]);
+  const ex = w.s.filter(Boolean)[Math.floor(Math.random() * w.s.filter(Boolean).length)] || "";
+  return `<section class="spot" style="--c:${COLORS[i]}" aria-label="كلمة من قائمتك">
+    <div class="lab"><span>كلمة من قائمتك${w.st === "m" ? "، فاتتك في آخر اختبار" : ""}</span><span class="tg">${esc(DEFAULT[i].en)}</span></div>
+    <div class="wl">${sayBtn(w.en)}<span class="en">${esc(w.en)}</span></div>
+    <div class="ar">${esc(w.ar)}</div>
+    <p class="ex">${hl(ex, w.en)}</p>
+    <div class="row"><button class="btn" data-act="spotnext">كلمة أخرى</button><button class="btn" data-act="open" data-i="${i}">افتح المرحلة</button></div>
+  </section>`;
+}
+function home(){
+  let total = 0, k = 0, m = 0;
+  S.decks.forEach(d => { const s = deckStats(d); total += s.n; k += s.k; m += s.m; });
+  const cards = S.decks.map((d, i) => {
+    const s = deckStats(d), meta = DEFAULT[i];
+    const last = d.last ? `آخر اختبار: <span class="en">${d.last.k}/${d.last.n}</span>` : "لم يُختبر بعد";
+    return `<button class="deck" style="--c:${COLORS[i]}" data-act="open" data-i="${i}">
+      <span class="tab">${esc(meta.en)}</span>
+      <h2>${esc(meta.ar)}</h2>
+      ${slotsHTML(d)}
+      <span class="meta"><span>${last}</span><span><span class="en">${s.n}</span> من ${CAP}</span></span>
+    </button>`;
+  }).join("");
+  return `
+    ${STORE_OK ? "" : '<div class="banner">هذا المتصفح لا يسمح بالحفظ، فستضيع تعديلاتك عند إغلاق الصفحة. انسخ نسخة احتياطية قبل الخروج.</div>'}
+    <div class="top">
+      <div class="brand"><h1>مفرداتي</h1><span class="lvl">B1–B2</span></div>
+      <button class="iconbtn" data-act="theme" aria-label="تبديل الوضع الليلي">${IC.moon}</button>
+    </div>
+    <p class="lead">عشر مراحل من المفردات الإنجليزية، كلها مفتوحة. احذف ما تعرفه، وأضف ما تلتقطه من الألعاب والفيديوهات، ثم اختبر نفسك.</p>
+    <div class="stats">
+      <div class="stat"><b>${total}</b><span>كلمة</span></div>
+      <div class="stat ok"><b>${k}</b><span>عرفتها</span></div>
+      <div class="stat miss"><b>${m}</b><span>تحتاج مراجعة</span></div>
+    </div>
+    ${spotHTML()}
+    <div class="decks">${cards}</div>
+    <div class="legend"><span><i class="k"></i>عرفتها</span><span><i class="m"></i>فاتتك</span><span><i></i>لم تُختبر</span><span><i class="e"></i>خانة فارغة</span></div>
+    <div class="foot">${syncHTML()}<button class="btn ghost" data-act="backup">${IC.save}النسخ الاحتياطي</button></div>`;
+}
+function deckView(){
+  const i = VIEW.i, d = S.decks[i], meta = DEFAULT[i], s = deckStats(d), c = COLORS[i];
+  const untested = s.n - s.k - s.m;
+  const f = VIEW.filter || "all";
+  const chip = (id, label, n) => `<button class="chip" aria-pressed="${f === id}" data-act="filter" data-f="${id}">${label}<b>${n}</b></button>`;
+  const ws = d.words.filter(w => f === "all" || (f === "m" && w.st === "m") || (f === "k" && w.st === "k") || (f === "n" && !w.st));
+  const full = d.words.length >= CAP;
+  const rows = ws.map(w => {
+    const open = VIEW.open === w.id;
+    return `<div class="word${open ? " open" : ""}" data-id="${esc(w.id)}">
+      <button class="wrow" data-act="toggle" data-id="${esc(w.id)}" aria-expanded="${open}">
+        <i class="mark ${w.st}" title="${w.st === "k" ? "عرفتها" : w.st === "m" ? "فاتتك" : "لم تُختبر"}"></i>
+        <span class="w"><span class="en">${esc(w.en)}</span><span class="ar">${esc(w.ar)}</span></span>
+        ${sayBtn(w.en)}${IC.chev}
+      </button>
+      <div class="wbody">
+        <ol class="sents">${w.s.filter(Boolean).map(x => `<li>${hl(x, w.en)}</li>`).join("")}</ol>
+        <div class="wtools">
+          <button class="btn ghost" data-act="edit" data-id="${esc(w.id)}">تعديل</button>
+          <button class="btn ghost danger" data-act="del" data-id="${esc(w.id)}">احذفها، أعرفها</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  const emptyMsg = d.words.length === 0
+    ? `<div class="empty">المرحلة فارغة. أضف كلمات تريد حفظها.</div>`
+    : `<div class="empty">لا توجد كلمات في هذا التصنيف.</div>`;
+  return `
+    <button class="back" data-act="home">${IC.back}كل المراحل</button>
+    <div class="dhead"><div class="en">${esc(meta.en)}</div><h2>${esc(meta.ar)}</h2>
+      <p>${nWord(s.n)} من ${CAP}${d.last ? `، وآخر اختبار ${d.last.k} من ${d.last.n}` : ""}</p></div>
+    <div class="actions">
+      <button class="btn primary" data-act="quiz" ${s.n ? "" : "disabled"}>${IC.quiz}ابدأ الاختبار</button>
+      <button class="btn" data-act="cards" ${s.n ? "" : "disabled"}>${IC.cards}بطاقات المراجعة</button>
+      <button class="btn" data-act="add" ${full ? "disabled" : ""} title="${full ? "المرحلة ممتلئة. احذف كلمة لتضيف أخرى." : ""}">${IC.plus}أضف كلمة</button>
+    </div>
+    ${full ? `<p class="note">المرحلة ممتلئة (${CAP} من ${CAP}). احذف كلمة تعرفها لتفتح خانة لكلمة جديدة.</p>` : ""}
+    <div class="chips" role="group" aria-label="تصفية الكلمات">
+      ${chip("all","الكل",s.n)}${chip("m","فاتتني",s.m)}${chip("n","لم تُختبر",untested)}${chip("k","عرفتها",s.k)}
+    </div>
+    <div class="list">${rows || emptyMsg}</div>`;
+}
+
+/* ---------- quiz ---------- */
+let Q = null;
+function pickDistractors(i, w){
+  const pool = S.decks[i].words.filter(x => x.id !== w.id && (!w.g || x.g !== w.g) && x.ar !== w.ar && x.en.toLowerCase() !== w.en.toLowerCase());
+  let picks = shuffle(pool).slice(0, 3);
+  if (picks.length < 3) {
+    const others = shuffle(S.decks.flatMap((d, j) => j === i ? [] : d.words)).filter(x => x.en.toLowerCase() !== w.en.toLowerCase() && x.ar !== w.ar && !picks.some(p => p.en === x.en));
+    picks = picks.concat(others.slice(0, 3 - picks.length));
+  }
+  return shuffle(picks.concat([w]));
+}
+function modeSheet(i){
+  const c = COLORS[i], n = S.decks[i].words.length;
+  const m = (k, t, d) => `<button class="mode${PREF.mode === k ? " last" : ""}" data-act="mode" data-m="${k}" data-i="${i}"><b>${t}</b><span>${d}</span></button>`;
+  openSheet(`<div style="--c:${c}">
+    <h3>طريقة الاختبار</h3><p class="sub">${esc(DEFAULT[i].ar)}، ${nWord(n)}</p>
+    <div class="modes">
+      ${PREF.mode === "self" ? m("self", "أعرفها / ما أعرفها", "تظهر الكلمة الإنجليزية فتحكم على نفسك، ثم يظهر معناها بالعربي.") + m("pick", "اختر الترجمة", "تظهر الكلمة العربية فتختار معناها من أربع كلمات إنجليزية.")
+        : m("pick", "اختر الترجمة", "تظهر الكلمة العربية فتختار معناها من أربع كلمات إنجليزية.") + m("self", "أعرفها / ما أعرفها", "تظهر الكلمة الإنجليزية فتحكم على نفسك، ثم يظهر معناها بالعربي.")}
+    </div>
+    <div class="row2"><button class="btn ghost" data-act="close">إلغاء</button></div></div>`);
+}
+function startQuiz(i, onlyIds, fromRoute, mode){
+  const d = S.decks[i];
+  let words = d.words.filter(w => !onlyIds || onlyIds.includes(w.id));
+  if (!words.length) { VIEW = { name:"deck", i }; return; }
+  Q = { i, mode: mode === "self" || mode === "pick" ? mode : PREF.mode, partial: !!onlyIds, items: shuffle(words).map(w => ({ w, opts: pickDistractors(i, w), r: null })), at: 0, ok: [], miss: [], locked: false, streak: 0, best: 0, prev: d.last ? Object.assign({}, d.last) : null, shown: false };
+  VIEW = { name:"quiz", i };
+  SFX.start();
+  if (!fromRoute) { if (location.hash !== "#quiz-" + i) { history.pushState(null, "", "#quiz-" + i); } render(); window.scrollTo(0,0); }
+}
+function quizView(){
+  const c = COLORS[Q.i];
+  if (Q.at >= Q.items.length) return resultView();
+  const it = Q.items[Q.at], n = Q.items.length;
+  const seg = Q.items.map((x, j) => `<i class="${x.r || (j === Q.at ? "cur" : "")}"></i>`).join("");
+  return `
+    <div class="qtop"><button class="back" data-act="quit">${IC.back}إنهاء الاختبار</button>
+      <div class="qside">
+        ${comboChip()}
+        <span class="qcount">${Q.at + 1} / ${n}</span>
+        <button class="tog" data-act="tsfx" aria-pressed="${PREF.sfx}" aria-label="المؤثرات الصوتية" title="المؤثرات الصوتية">${PREF.sfx ? IC.note : IC.noteoff}</button>
+        ${canSpeak ? `<button class="tog" data-act="tvoice" aria-pressed="${PREF.voice}" aria-label="نطق الكلمة بعد الإجابة" title="نطق الكلمة بعد الإجابة">${PREF.voice ? IC.say : IC.mute}</button>` : ""}
+      </div>
+    </div>
+    <div class="track" aria-hidden="true">${seg}</div>
+    ${Q.mode === "self" ? `
+    <div class="prompt"><small>هل تعرف معنى هذه الكلمة؟</small><div class="qen" dir="ltr" lang="en">${esc(it.w.en)}${sayBtn(it.w.en)}</div><div class="reveal" aria-live="polite"></div></div>
+    <div class="selfq" role="group" aria-label="تقييمك">
+      <button class="sbtn k" data-act="know" data-v="1">${IC.check}أعرفها</button>
+      <button class="sbtn m" data-act="know" data-v="0">${IC.x}ما أعرفها</button>
+    </div>
+    <p class="note kbd" style="text-align:center">اضغط 1 إذا عرفتها، و2 إذا ما عرفتها.</p>` : `
+    <div class="prompt"><small>اختر الكلمة الإنجليزية التي تعني</small><div class="ar">${esc(it.w.ar)}</div></div>
+    <div class="opts" role="group" aria-label="الخيارات">
+      ${it.opts.map((o, k) => `<button class="opt" data-act="pick" data-k="${k}"><span class="k">${k + 1}</span><span class="en">${esc(o.en)}</span></button>`).join("")}
+    </div>
+    <p class="note kbd" style="text-align:center">يمكنك الاختيار بالأرقام 1 إلى 4 من لوحة المفاتيح.</p>`}`;
+}
+function comboChip(){
+  const s = Q.streak, l = s >= 10 ? 3 : s >= 5 ? 2 : 1;
+  return `<span class="combo${s >= 2 ? " on" : ""}" data-l="${l}" aria-live="polite" aria-label="${s >= 2 ? "سلسلة " + s + " إجابات صحيحة" : ""}">${IC.flame}<span>${s >= 2 ? s : ""}</span></span>`;
+}
+const MILESTONE = n => n === 3 || n === 5 || (n >= 10 && n % 5 === 0);
+function sparks(btn){
+  if (RM.matches) return;
+  const cols = ["var(--ok)", "var(--c)", "#F2B21B", "#FF7A59"];
+  for (let j = 0; j < 12; j++) {
+    const a = (j / 12) * Math.PI * 2 + Math.random() * .4, r = 46 + Math.random() * 46;
+    const d = document.createElement("i"); d.className = "spark";
+    d.style.background = cols[j % cols.length];
+    d.style.setProperty("--dx", Math.cos(a) * r * 1.6 + "px"); d.style.setProperty("--dy", Math.sin(a) * r + "px");
+    btn.appendChild(d);
+  }
+}
+function pick(k){
+  if (!Q || Q.locked) return;
+  const it = Q.items[Q.at]; const chosen = it.opts[k]; if (!chosen) return;
+  Q.locked = true;
+  const right = chosen.id === it.w.id;
+  const btns = document.querySelectorAll(".opt");
+  btns.forEach((b, j) => { b.disabled = true; if (it.opts[j].id === it.w.id) b.classList.add("right"); });
+  const pr = document.querySelector(".prompt"); if (pr) pr.classList.add(right ? "good" : "bad");
+  const segEl = document.querySelectorAll(".track i")[Q.at]; if (segEl) segEl.className = right ? "ok" : "miss";
+  it.r = right ? "ok" : "miss";
+  if (right) {
+    Q.streak++; Q.best = Math.max(Q.best, Q.streak);
+    btns[k].classList.add("hit"); sparks(btns[k]);
+    SFX.right(Q.streak); if (MILESTONE(Q.streak)) SFX.combo(Q.streak);
+  } else {
+    Q.streak = 0; btns[k].classList.add("wrong"); SFX.wrong();
+  }
+  const chip = document.querySelector(".combo");
+  if (chip) { chip.outerHTML = comboChip(); const c2 = document.querySelector(".combo"); if (right && Q.streak >= 2) { void c2.offsetWidth; c2.classList.add("bump"); } }
+  (right ? Q.ok : Q.miss).push(it.w);
+  if (PREF.voice) setTimeout(() => speak(it.w.en), right ? 160 : 420);
+  const wait = right ? (PREF.voice ? 820 : 560) : 1450;
+  setTimeout(() => { Q.at++; Q.locked = false; if (Q.at >= Q.items.length) finishQuiz(); render(); if (Q && Q.at >= Q.items.length) celebrate(); }, wait);
+}
+function judge(know){
+  if (!Q || Q.locked || Q.mode !== "self") return;
+  const it = Q.items[Q.at]; Q.locked = true;
+  const btns = document.querySelectorAll(".sbtn"); btns.forEach(b => { b.disabled = true; });
+  const mine = btns[know ? 0 : 1]; if (mine) mine.classList.add("on");
+  const pr = document.querySelector(".prompt"); if (pr) pr.classList.add(know ? "good" : "bad");
+  const rv = document.querySelector(".prompt .reveal"); if (rv) rv.innerHTML = `<span class="mean">${esc(it.w.ar)}</span>`;
+  const segEl = document.querySelectorAll(".track i")[Q.at]; if (segEl) segEl.className = know ? "ok" : "miss";
+  it.r = know ? "ok" : "miss";
+  if (know) { Q.streak++; Q.best = Math.max(Q.best, Q.streak); if (mine) sparks(mine); SFX.right(Q.streak); if (MILESTONE(Q.streak)) SFX.combo(Q.streak); }
+  else { Q.streak = 0; SFX.wrong(); }
+  const chip = document.querySelector(".combo");
+  if (chip) { chip.outerHTML = comboChip(); const c2 = document.querySelector(".combo"); if (know && Q.streak >= 2) { void c2.offsetWidth; c2.classList.add("bump"); } }
+  (know ? Q.ok : Q.miss).push(it.w);
+  if (PREF.voice) setTimeout(() => speak(it.w.en), 200);
+  const wait = know ? 950 : 1700;
+  setTimeout(() => { Q.at++; Q.locked = false; if (Q.at >= Q.items.length) finishQuiz(); render(); if (Q && Q.at >= Q.items.length) celebrate(); }, wait);
+}
+function celebrate(){
+  if (!Q || Q.shown) return; Q.shown = true;
+  const n = Q.items.length, k = Q.ok.length, pct = n ? Math.round(k / n * 100) : 0;
+  const el = document.querySelector(".res .score b");
+  const end = () => { SFX.finish(pct); if (pct >= 80) confetti(); };
+  if (!el || RM.matches || k === 0) { end(); return; }
+  const dur = Math.min(900, 120 + k * 40), t0 = performance.now(); let shown = -1;
+  el.textContent = "0";
+  (function f(t){
+    const v = Math.round(Math.min(1, (t - t0) / dur) * k);
+    if (v !== shown) { shown = v; el.textContent = v; if (v) SFX.tick(); }
+    if (v < k) requestAnimationFrame(f); else end();
+  })(t0);
+}
+function confetti(){
+  if (RM.matches) return;
+  const cv = document.createElement("canvas"); cv.className = "confetti"; document.body.appendChild(cv);
+  const dpr = Math.min(2, window.devicePixelRatio || 1), W = innerWidth, H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr; const g = cv.getContext("2d"); g.scale(dpr, dpr);
+  const cols = COLORS.concat(["#F2B21B", "#13865A"]);
+  const P = Array.from({ length: 110 }, () => ({ x: W / 2 + (Math.random() - .5) * W * .3, y: H * .35, vx: (Math.random() - .5) * 13, vy: -Math.random() * 13 - 4, r: Math.random() * 6.28, vr: (Math.random() - .5) * .35, w: 6 + Math.random() * 6, h: 4 + Math.random() * 5, c: cols[Math.floor(Math.random() * cols.length)] }));
+  const t0 = performance.now();
+  (function f(t){
+    const el = (t - t0) / 1000; g.clearRect(0, 0, W, H);
+    P.forEach(p => { p.vy += .38; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr; g.save(); g.globalAlpha = Math.max(0, 1 - el / 2.4); g.translate(p.x, p.y); g.rotate(p.r); g.fillStyle = p.c; g.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); g.restore(); });
+    if (el < 2.4) requestAnimationFrame(f); else cv.remove();
+  })(t0);
+}
+function finishQuiz(){
+  const d = S.decks[Q.i];
+  const okIds = new Set(Q.ok.map(w => w.id)), missIds = new Set(Q.miss.map(w => w.id));
+  d.words.forEach(w => { if (okIds.has(w.id)) w.st = "k"; else if (missIds.has(w.id)) w.st = "m"; });
+  if (!Q.partial) d.last = { k: Q.ok.length, n: Q.items.length, t: Date.now() };
+  touch(Q.i);
+}
+function resultView(){
+  const n = Q.items.length, k = Q.ok.length, pct = n ? Math.round(k / n * 100) : 0;
+  const msg = pct === 100 ? "كل الكلمات صحيحة." : pct >= 80 ? "نتيجة قوية. راجع القليل الذي فاتك." : pct >= 50 ? "أكثر من النصف. ركّز على الكلمات التي فاتتك." : "هذه المرحلة تحتاج مراجعة. ابدأ بالبطاقات ثم أعد الاختبار.";
+  const li = w => `<li><span class="en">${esc(w.en)}</span><span>${esc(w.ar)}</span></li>`;
+  return `
+    <button class="back" data-act="backdeck">${IC.back}${esc(DEFAULT[Q.i].ar)}</button>
+    <div class="res"><div class="score"><b>${k}</b><small> / ${n}</small></div><p>${msg}${Q.partial ? " (اختبار الكلمات التي فاتتك فقط)" : ""}${Q.mode === "self" ? " (بتقييمك لنفسك)" : ""}</p>
+      <div class="rstats">${Q.best >= 2 ? `<span>أطول سلسلة صحيحة: <b>${Q.best}</b></span>` : ""}${!Q.partial && Q.prev ? `<span>المرة السابقة: <b dir="ltr">${Q.prev.k} / ${Q.prev.n}</b>${k > Q.prev.k ? ` <em class="up">(+${k - Q.prev.k})</em>` : ""}</span>` : ""}</div></div>
+    <div class="actions" style="justify-content:center">
+      ${Q.miss.length ? `<button class="btn primary" data-act="retrymiss">اختبر ما فاتني (${Q.miss.length})</button>` : ""}
+      <button class="btn${Q.miss.length ? "" : " primary"}" data-act="retry">أعد الاختبار كاملًا</button>
+      <button class="btn ghost" data-act="backdeck">ارجع للمرحلة</button>
+    </div>
+    <div class="rlists">
+      <div class="rbox"><h3><i style="background:var(--miss)"></i>فاتتك (${Q.miss.length})</h3>${Q.miss.length ? `<ul>${Q.miss.map(li).join("")}</ul>` : '<p class="note">لا شيء.</p>'}</div>
+      <div class="rbox"><h3><i style="background:var(--ok)"></i>عرفتها (${k})</h3>${k ? `<ul>${Q.ok.map(li).join("")}</ul>` : '<p class="note">لا شيء بعد.</p>'}</div>
+    </div>`;
+}
+
+/* ---------- cards ---------- */
+let C = null;
+function startCards(i, fromRoute){
+  const d = S.decks[i]; if (!d.words.length) { VIEW = { name:"deck", i }; return; }
+  const missOnly = d.words.some(w => w.st === "m") && C && C.i === i ? C.missOnly : false;
+  C = { i, order: d.words.map(w => w.id), at: 0, flip: false, missOnly };
+  applyCardFilter();
+  VIEW = { name:"cards", i };
+  if (!fromRoute) { if (location.hash !== "#cards-" + i) history.pushState(null, "", "#cards-" + i); render(); window.scrollTo(0,0); }
+}
+function applyCardFilter(){
+  const d = S.decks[C.i];
+  const ids = d.words.filter(w => !C.missOnly || w.st === "m").map(w => w.id);
+  C.order = C.shuffled ? shuffle(ids) : ids; C.at = 0; C.flip = false;
+}
+function cardsView(){
+  const d = S.decks[C.i];
+  const ids = C.order.filter(id => d.words.some(w => w.id === id));
+  if (!ids.length) return `<button class="back" data-act="backdeck">${IC.back}${esc(DEFAULT[C.i].ar)}</button><div class="empty" style="margin-top:16px">لا توجد بطاقات هنا.</div>`;
+  if (C.at >= ids.length) C.at = ids.length - 1;
+  const w = d.words.find(x => x.id === ids[C.at]);
+  const missN = d.words.filter(x => x.st === "m").length;
+  return `
+    <div class="qtop"><button class="back" data-act="backdeck">${IC.back}${esc(DEFAULT[C.i].ar)}</button></div>
+    <div class="chips">
+      <button class="chip" aria-pressed="${!C.missOnly}" data-act="cfilter" data-f="all">كل البطاقات</button>
+      <button class="chip" aria-pressed="${C.missOnly}" data-act="cfilter" data-f="m" ${missN ? "" : "disabled"}>ما فاتني فقط<b>${missN}</b></button>
+      <button class="chip" aria-pressed="${!!C.shuffled}" data-act="cshuffle">خلط الترتيب</button>
+    </div>
+    <div class="stage">
+      <div class="card${C.flip ? " flip" : ""}" data-act="flip" role="button" tabindex="0" aria-label="اقلب البطاقة">
+        <div class="face front"><span class="side">الوجه</span><div class="ar">${esc(w.ar)}</div><div class="hint">تذكّر الكلمة الإنجليزية، ثم اضغط لتقلب البطاقة</div></div>
+        <div class="face back"><span class="side">الظهر</span>
+          <div class="bigen"><span class="en">${esc(w.en)}</span>${sayBtn(w.en)}</div>
+          <div class="hint">${esc(w.ar)}</div>
+          <ol class="sents">${w.s.filter(Boolean).map(x => `<li>${hl(x, w.en)}</li>`).join("")}</ol>
+        </div>
+      </div>
+    </div>
+    ${C.flip ? `<div class="selfrate"><button class="btn k" data-act="rate" data-r="k">عرفتها</button><button class="btn m" data-act="rate" data-r="m">ما عرفتها</button></div>` : ""}
+    <div class="cnav">
+      <button class="btn" data-act="cprev" ${C.at ? "" : "disabled"}>السابقة</button>
+      <span class="pos">${C.at + 1} / ${ids.length}</span>
+      <button class="btn" data-act="cnext" ${C.at < ids.length - 1 ? "" : "disabled"}>التالية</button>
+    </div>`;
+}
+
+/* ---------- dialogs ---------- */
+function openSheet(html, onMount){
+  const layer = document.getElementById("layer");
+  const back = document.activeElement;
+  layer.innerHTML = `<div class="scrim" data-act="scrim"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;
+  const sh = layer.querySelector(".sheet"); sh._back = back;
+  if (onMount) onMount(sh);
+  const f = sh.querySelector("input,textarea,button"); if (f) f.focus();
+}
+function closeSheet(){
+  const layer = document.getElementById("layer"); const sh = layer.querySelector(".sheet");
+  const back = sh && sh._back; layer.innerHTML = "";
+  if (back && back.isConnected) back.focus({ preventScroll: true });
+}
+function wordForm(i, w){
+  const d = S.decks[i];
+  const title = w ? "تعديل الكلمة" : "كلمة جديدة";
+  const sub = w ? esc(DEFAULT[i].ar) : `${esc(DEFAULT[i].ar)}، الخانة ${d.words.length + 1} من ${CAP}`;
+  const v = k => esc(w ? (k === "en" ? w.en : k === "ar" ? w.ar : w.s[k] || "") : "");
+  openSheet(`
+    <h3>${title}</h3><p class="sub">${sub}</p>
+    <form id="wf" novalidate>
+      <div class="field"><label for="f-en">الكلمة الإنجليزية</label><input id="f-en" class="en" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="60" value="${v("en")}"><span class="err" id="e-en"></span></div>
+      <div class="field"><label for="f-ar">المعنى العربي</label><input id="f-ar" autocomplete="off" maxlength="80" value="${v("ar")}"><span class="err" id="e-ar"></span></div>
+      ${[0,1,2].map(k => `<div class="field"><label for="f-s${k}">الجملة ${["الأولى","الثانية","الثالثة"][k]}</label><textarea id="f-s${k}" class="en" dir="ltr" rows="2" maxlength="220" spellcheck="true">${v(k)}</textarea><span class="err" id="e-s${k}"></span></div>`).join("")}
+      <div class="row2"><button class="btn primary" type="submit" style="--c:${COLORS[i]}">${w ? "احفظ التعديل" : "أضف الكلمة"}</button><button class="btn ghost" type="button" data-act="close">إلغاء</button></div>
+    </form>`, sh => {
+      const check = () => {
+        const en = sh.querySelector("#f-en").value.trim();
+        [0,1,2].forEach(k => { const t = sh.querySelector("#f-s"+k).value.trim(), e = sh.querySelector("#e-s"+k);
+          if (e.classList.contains("err") && e.textContent && t) { e.textContent = ""; }
+          if (t && en && !hasForm(t, en)) { e.className = "warn"; e.textContent = "الجملة لا تحتوي الكلمة. يمكنك الحفظ، لكن الأفضل أن تظهر الكلمة فيها."; }
+          else if (e.className === "warn") { e.textContent = ""; e.className = "err"; } });
+      };
+      sh.addEventListener("input", ev => { const e = ev.target.nextElementSibling; if (e && e.className === "err") e.textContent = ""; check(); }); check();
+      sh.querySelector("#wf").addEventListener("submit", ev => {
+        ev.preventDefault();
+        const en = sh.querySelector("#f-en").value.trim().replace(/\s+/g, " ");
+        const ar = sh.querySelector("#f-ar").value.trim().replace(/\s+/g, " ");
+        const s = [0,1,2].map(k => sh.querySelector("#f-s"+k).value.trim().replace(/\s+/g, " "));
+        let bad = false; const err = (id, m) => { const e = sh.querySelector("#e-"+id); e.className = "err"; e.textContent = m; bad = true; };
+        ["en","ar","s0","s1","s2"].forEach(id => { const e = sh.querySelector("#e-"+id); if (e.className === "err") e.textContent = ""; });
+        if (!en) err("en", "اكتب الكلمة الإنجليزية.");
+        else if (!/^[A-Za-z][A-Za-z' -]*$/.test(en)) err("en", "استعمل حروفًا إنجليزية فقط، ويُسمح بالمسافة والشرطة والفاصلة العليا.");
+        else {
+          const lower = en.toLowerCase();
+          S.decks.forEach((dd, j) => dd.words.forEach(x => { if (x.en.toLowerCase() === lower && (!w || x.id !== w.id)) err("en", `هذه الكلمة موجودة في مرحلة «${DEFAULT[j].ar}».`); }));
+        }
+        if (!ar) err("ar", "اكتب المعنى العربي.");
+        s.forEach((x, k) => { if (!x) err("s"+k, "اكتب جملة توضّح استعمال الكلمة."); });
+        if (bad) { const f = sh.querySelector(".err:not(:empty)"); if (f) f.previousElementSibling.focus(); return; }
+        if (w) { const changedEn = w.en.toLowerCase() !== en.toLowerCase(); w.en = en; w.ar = ar; w.s = s; if (changedEn) { w.st = ""; w.g = ""; } }
+        else { if (d.words.length >= CAP) return closeSheet(); d.words.push({ id: "u" + Date.now().toString(36) + Math.random().toString(36).slice(2,6), en, ar, s, g:"", st:"" }); }
+        touch(i); closeSheet();
+        if (!w) { VIEW.filter = "all"; VIEW.open = d.words[d.words.length - 1].id; }
+        render();
+        toast(w ? "حُفظ التعديل." : `أُضيفت «${en}».`);
+      });
+    });
+}
+function confirmSheet(title, body, yes, onYes, danger){
+  openSheet(`<h3>${title}</h3><p class="sub">${body}</p><div class="row2"><button class="btn primary" data-act="yes" style="${danger ? "--c:var(--miss)" : ""}">${yes}</button><button class="btn ghost" data-act="close">إلغاء</button></div>`,
+    sh => sh.querySelector('[data-act="yes"]').addEventListener("click", () => { closeSheet(); onYes(); }));
+}
+let DL = null;
+function backupSheet(){
+  const json = JSON.stringify({ app:"mufradati", v:1, saved: new Date().toISOString(), decks: S.decks });
+  openSheet(`
+    <h3>النسخ الاحتياطي</h3>
+    <p class="sub">قائمتك محفوظة ${SYNC === "cloud" ? "في حسابك وفي هذا المتصفح" : "في هذا المتصفح فقط"}. خذ نسخة احتياطية قبل مسح بيانات المتصفح أو الانتقال لجهاز آخر.</p>
+    <div class="row2" style="margin-bottom:18px">
+      ${DL ? `<button class="btn primary" data-act="dl">${IC.save}نزّل ملف النسخة</button>` : ""}
+      <button class="btn${DL ? "" : " primary"}" data-act="copy">انسخ النسخة</button>
+    </div>
+    <div class="field"><label for="imp">استرجاع نسخة</label>
+      <textarea id="imp" class="en" dir="ltr" rows="3" placeholder="الصق نص النسخة هنا"></textarea>
+      <span class="err" id="e-imp"></span></div>
+    <div class="row2" style="margin-bottom:18px">
+      <button class="btn" data-act="importtxt">استرجع من النص</button>
+      <label class="btn" for="impf" style="cursor:pointer">اختر ملفًا</label><input id="impf" type="file" accept=".json,application/json" class="sr">
+    </div>
+    <div class="field"><label>البداية من جديد</label><p class="note" style="margin:0">يعيد المراحل العشر إلى كلماتها الأصلية ويمسح نتائج الاختبارات وكل ما أضفته.</p></div>
+    <div class="row2"><button class="btn danger" data-act="reset">أعد كل شيء إلى البداية</button><button class="btn ghost" data-act="close">إغلاق</button></div>`,
+    sh => {
+      const msg = t => { const e = sh.querySelector("#e-imp"); e.textContent = t; };
+      const imp = txt => {
+        let o; try { o = JSON.parse(txt); } catch (e) { return msg("النص ليس نسخة صالحة. انسخه كاملًا كما هو."); }
+        if (!o || !Array.isArray(o.decks) || o.decks.length !== DEFAULT.length) return msg("النص لا يحتوي مراحل مفرداتي العشر.");
+        confirmSheet("استرجاع النسخة", "ستحل النسخة محل قائمتك الحالية كلها.", "استرجع", () => {
+          S = { v:1, decks: o.decks.map(cleanDeck) }; S.decks.forEach((d, i) => touch(i)); go(""); render(); toast("استُرجعت النسخة.");
+        });
+      };
+      sh.querySelector('[data-act="importtxt"]').addEventListener("click", () => { const t = sh.querySelector("#imp").value.trim(); if (!t) return msg("الصق نص النسخة أولًا."); imp(t); });
+      sh.querySelector("#impf").addEventListener("change", ev => { const f = ev.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => imp(String(r.result)); r.readAsText(f); });
+      sh.querySelector('[data-act="copy"]').addEventListener("click", async ev => {
+        try { await navigator.clipboard.writeText(json); toast("نُسخت النسخة. احفظها في ملاحظاتك."); }
+        catch (e) { const t = sh.querySelector("#imp"); t.value = json; t.select(); msg("لم يُسمح بالنسخ التلقائي. النص محدد في المربع، انسخه يدويًا."); }
+      });
+      const dlb = sh.querySelector('[data-act="dl"]');
+      if (dlb) dlb.addEventListener("click", async () => {
+        try { await DL.save({ filename: "mufradati-" + new Date().toISOString().slice(0,10) + ".json", data: json }); }
+        catch (e) { msg("لم يكتمل التنزيل. جرّب «انسخ النسخة»."); }
+      });
+      sh.querySelector('[data-act="reset"]').addEventListener("click", () => confirmSheet("البداية من جديد", "ستعود المراحل العشر إلى كلماتها الأصلية، وتُمسح نتائجك وكل ما أضفته أو حذفته. لا يمكن التراجع.", "أعد كل شيء", () => { S = fresh(); S.decks.forEach((d, i) => touch(i)); go(""); render(); toast("عادت القوائم إلى البداية."); }, true));
+    });
+}
+let toastT = 0;
+function toast(text, undo){
+  clearTimeout(toastT); const old = document.querySelector(".toast"); if (old) old.remove();
+  const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status");
+  t.innerHTML = `<span>${esc(text)}</span>${undo ? '<button type="button">تراجع</button>' : ""}`;
+  document.body.appendChild(t);
+  if (undo) t.querySelector("button").addEventListener("click", () => { undo(); t.remove(); });
+  toastT = setTimeout(() => t.remove(), undo ? 6000 : 2600);
+}
+
+/* ---------- render & events ---------- */
+function render(){
+  const app = document.getElementById("app");
+  let html = "", c = "";
+  if (VIEW.name === "deck") { html = deckView(); c = COLORS[VIEW.i]; }
+  else if (VIEW.name === "quiz" && Q) { html = quizView(); c = COLORS[Q.i]; }
+  else if (VIEW.name === "cards" && C) { html = cardsView(); c = COLORS[C.i]; }
+  else { VIEW = { name:"home" }; html = home(); }
+  app.style.setProperty("--c", c || "var(--accent)");
+  app.innerHTML = html;
+}
+document.addEventListener("click", ev => {
+  const el = ev.target.closest("[data-act]"); if (!el) return;
+  const a = el.dataset.act;
+  if (a === "scrim") { if (ev.target === el) closeSheet(); return; }
+  if (a === "close") return closeSheet();
+  if (a === "say") { ev.stopPropagation(); return speak(el.dataset.say); }
+  if (a === "open") return go("deck-" + el.dataset.i);
+  if (a === "home") return go("");
+  if (a === "theme") { const r = document.documentElement; const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; r.dataset.theme = dark ? "light" : "dark"; try { localStorage.setItem(KEY + ".theme", r.dataset.theme); } catch (e) {} return; }
+  if (a === "backup") return backupSheet();
+  if (a === "spotnext") { pickSpot(); return render(); }
+  if (a === "filter") { VIEW.filter = el.dataset.f; return render(); }
+  if (a === "toggle") { VIEW.open = VIEW.open === el.dataset.id ? null : el.dataset.id; return render(); }
+  if (a === "add") return wordForm(VIEW.i);
+  if (a === "edit") { const w = S.decks[VIEW.i].words.find(x => x.id === el.dataset.id); return w && wordForm(VIEW.i, w); }
+  if (a === "del") {
+    const i = VIEW.i, d = S.decks[i], j = d.words.findIndex(x => x.id === el.dataset.id); if (j < 0) return;
+    const [w] = d.words.splice(j, 1); touch(i); render();
+    return toast(`حُذفت «${w.en}».`, () => { if (d.words.length < CAP) { d.words.splice(Math.min(j, d.words.length), 0, w); touch(i); render(); } });
+  }
+  if (a === "quiz") return modeSheet(VIEW.i);
+  if (a === "mode") { const m = el.dataset.m; PREF.mode = m; savePref(); closeSheet(); return startQuiz(+el.dataset.i, null, false, m); }
+  if (a === "know") return judge(el.dataset.v === "1");
+  if (a === "cards") return startCards(VIEW.i);
+  if (a === "pick") return pick(+el.dataset.k);
+  if (a === "tsfx") { PREF.sfx = !PREF.sfx; savePref(); el.setAttribute("aria-pressed", PREF.sfx); el.innerHTML = PREF.sfx ? IC.note : IC.noteoff; if (PREF.sfx) SFX.right(1); return; }
+  if (a === "tvoice") { PREF.voice = !PREF.voice; savePref(); el.setAttribute("aria-pressed", PREF.voice); el.innerHTML = PREF.voice ? IC.say : IC.mute; if (!PREF.voice && canSpeak) { try { speechSynthesis.cancel(); } catch (e) {} } return; }
+  if (a === "quit") return confirmSheet("إنهاء الاختبار؟", "لن تُحفظ إجابات هذا الاختبار.", "أنهِ الاختبار", () => { const i = Q.i; Q = null; go("deck-" + i); });
+  if (a === "backdeck") { const i = VIEW.name === "cards" ? C.i : Q ? Q.i : VIEW.i; return go("deck-" + i); }
+  if (a === "retry") return startQuiz(Q.i, null, false, Q.mode);
+  if (a === "retrymiss") return startQuiz(Q.i, Q.miss.map(w => w.id), false, Q.mode);
+  if (a === "flip") { C.flip = !C.flip; return render(); }
+  if (a === "cnext") { C.at++; C.flip = false; return render(); }
+  if (a === "cprev") { C.at = Math.max(0, C.at - 1); C.flip = false; return render(); }
+  if (a === "cfilter") { C.missOnly = el.dataset.f === "m"; applyCardFilter(); return render(); }
+  if (a === "cshuffle") { C.shuffled = !C.shuffled; applyCardFilter(); return render(); }
+  if (a === "rate") {
+    const d = S.decks[C.i], ids = C.order.filter(id => d.words.some(w => w.id === id)), w = d.words.find(x => x.id === ids[C.at]);
+    if (w) { w.st = el.dataset.r; touch(C.i); }
+    if (C.at < ids.length - 1) { C.at++; C.flip = false; } else toast("انتهت البطاقات.");
+    return render();
+  }
+});
+document.addEventListener("keydown", ev => {
+  if (document.querySelector(".scrim")) { if (ev.key === "Escape") closeSheet(); return; }
+  const t = ev.target;
+  if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+  if (ev.key === "Enter" || ev.key === " ") {
+    if (t && t.dataset && (t.dataset.act === "say" || t.dataset.act === "flip")) { ev.preventDefault(); t.click(); return; }
+  }
+  if (VIEW.name === "quiz" && Q && Q.at < Q.items.length) {
+    if (Q.mode === "self") { if (ev.key === "1") { judge(true); return; } if (ev.key === "2") { judge(false); return; } }
+    else if (/^[1-4]$/.test(ev.key)) { pick(+ev.key - 1); return; }
+  }
+  if (VIEW.name === "cards" && C) {
+    if (ev.key === " " && !(t && t.closest && t.closest("button"))) { ev.preventDefault(); C.flip = !C.flip; render(); }
+    else if (ev.key === "ArrowLeft") { document.querySelector('[data-act="cnext"]:not([disabled])')?.click(); }
+    else if (ev.key === "ArrowRight") { document.querySelector('[data-act="cprev"]:not([disabled])')?.click(); }
+  }
+});
+window.addEventListener("hashchange", route);
+
+/* ---------- boot ---------- */
+try { const th = localStorage.getItem(KEY + ".theme"); if (th === "dark" || th === "light") document.documentElement.dataset.theme = th; } catch (e) {}
+S = loadLocal();
+if (MIGRATED.size) { MIGRATED.forEach(i => { S.decks[i].u = Date.now(); }); saveLocal(); MIGRATED.clear(); }
+route();
+initCloud();
+(async () => {
+  try { if (window.claude && window.claude.use) DL = await window.claude.use("downloads"); } catch (e) { DL = null; }
+  if (!DL) DL = { save: async ({ filename, data }) => {
+    const url = URL.createObjectURL(new Blob([data], { type: "application/json" }));
+    const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  } };
+})();
+try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+if (canSpeak) { try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => {}; } catch (e) {} }
+</script>
+<script>
+if ("serviceWorker" in navigator && location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+  addEventListener("load", function () { if (navigator.serviceWorker) navigator.serviceWorker.register("./sw.js").catch(function () {}); });
+}
+</script></body>
+</html>
