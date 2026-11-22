@@ -6,7 +6,7 @@
   "dir": "rtl",
   "start_url": "./",
   "scope": "./",
-  "id": "./",
+  "id": "app-mufradati",
   "display": "standalone",
   "orientation": "any",
   "theme_color": "#4353D6",

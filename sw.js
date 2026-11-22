@@ -1,5 +1,5 @@
 /* offline cache for mufradati */
-const CACHE = "mufradati-37bcb4e0e1";
+const CACHE = "mufradati-afbb8817b4";
 const FILES = [
 "./",
 "fonts/bricolage-grotesque-latin-ext-opsz-normal.woff2",
@@ -33,11 +33,15 @@ self.addEventListener("install", e => {
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith("mufradati-") && k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
+const BASE = new URL("./", self.location).pathname;
+const OWN = new Set(FILES.map(f => new URL(f, self.location).pathname));
 self.addEventListener("fetch", e => {
   const r = e.request;
   if (r.method !== "GET") return;
   const u = new URL(r.url);
   if (u.origin !== location.origin) return;
+  /* only this app's own files: another app may live in a sub-folder of the same site */
+  if (!OWN.has(u.pathname) && u.pathname !== BASE) return;
   if (r.mode === "navigate") {
     e.respondWith(fetch(r).then(res => res.ok ? res : caches.match("./index.html")).catch(() => caches.match("./index.html")));
     return;
